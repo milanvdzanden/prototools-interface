@@ -20,6 +20,7 @@ io.on('connection', (socket) => {
 	socket.on('update', (message) => {
 		txBuffer = message;
 		txAvailable = true;
+		console.log(txBuffer)
 	});
 });
 
