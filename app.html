@@ -1,0 +1,1482 @@
+<!--
+    TODO:
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="height=device-height, initial-scale=1.0">
+    <link rel="stylesheet" href="/app.css">
+    <!--<link rel="preconnect" href="https://fonts.googleapis.com">-->
+    <!--<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+    <!--<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">-->
+    <script src="/socket.io/socket.io.min.js"></script>
+    <title>ProtoStack</title>
+</head>
+<body>
+    <script src="/p5.min.js"></script>
+    <script src="/osc.js"></script>
+    <script src="/logic.js"></script>
+    <script src="/sig.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <div id="overlay">
+        <div class="parent parent-dc parent-active">
+            <div class="grid-navbar" id="dc-focus-1">
+                <div class="grid-navbar-item selected focus" id="dc-focus-1-1" onclick="setPage('parent-dc')">
+                    <img src="DC.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="dc-focus-1-2" onclick="setPage('parent-osc')">
+                    <img src="Osc.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="dc-focus-1-3" onclick="setPage('parent-sig')">
+                    <img src="Sig.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="dc-focus-1-4" onclick="setPage('parent-logic')">
+                    <img src="Data.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item grid-navbar-item-second-last" id="dc-focus-1-5" onclick="toggleBottomBar()">
+                    <img src="Fullscreen.svg" style="width: 30px" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item grid-navbar-item-last" id="dc-focus-1-6" onclick="setPage('parent-settings')">
+                    <img src="Settings.svg" style="width: 30px" class="navbar-item-image">
+                </div>
+            </div>
+            <div class="grid-dc-row dc-row-1" id="dc-focus-2">
+                <p class="dc-column">
+                    <span class="dc-column-type">VOLTAGE</span>
+                    <span class="dc-column-value dc-wide-value" id="dc-focus-2-1">15.00</span>
+                    <span class="dc-column-label">V</span>
+                </p>   
+            </div>
+            <div class="grid-dc-row dc-row-2" id="dc-focus-3">
+                <p class="dc-column">
+                    <span class="dc-column-type">CURRENT</span>
+                    <span class="dc-column-value dc-wide-value">2.0</span>
+                    <span class="dc-column-label">mA</span>
+                    <span class="dc-column-type">LIMIT</span>
+                    <span class="dc-column-value" id="dc-focus-3-1">0.05</span>
+                    <span class="dc-column-label">A</span>
+                </p>   
+            </div>
+            <div class="grid-dc-row dc-row-3" id="dc-focus-4">
+                <p class="dc-column">
+                    <span class="dc-column-type">POWER</span>
+                    <span class="dc-column-value dc-wide-value">1</span>
+                    <span class="dc-column-label">W</span>
+                </p>   
+            </div>
+            <div class="grid-multibar" id="dc-focus-5">
+                <div class="grid-multibar-arrow" id="multibar-dc-arrow">
+                    <div onclick="updateMultibar(DC_ModuleSelected - 1, 'dc')" id="dc-left">◄</div>
+                    <div onclick="updateMultibar(DC_ModuleSelected + 1, 'dc')" id="dc-right">►</div>
+                </div>
+            </div>
+            <div class="grid-sidebar">
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+            </div>
+            <div id="dc-scroll-bar" class="scroll-bar">
+            </div>
+        </div>
+        <div id="parent-osc" class="parent parent-osc">
+            <div class="grid-navbar" id="osc-focus-1">
+                <div class="grid-navbar-item" id="osc-focus-1-1" onclick="setPage('parent-dc')">
+                    <img src="DC.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item selected focus" id="osc-focus-1-2" onclick="setPage('parent-osc')">
+                    <img src="Osc.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="osc-focus-1-3" onclick="setPage('parent-sig')">
+                    <img src="Sig.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="osc-focus-1-4" onclick="setPage('parent-logic')">
+                    <img src="Data.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-osc-timediv" id="osc-focus-1-5">
+                    <span><span class="navbar-osc-division">100</span>ms/</span>
+                </div>
+                <div class="grid-navbar-osc grid-navbar-osc-1" id="osc-focus-1-6">
+                    <span><span class="navbar-osc-number" style="color: var(--color1)">1</span><span class="navbar-osc-division">100</span>mV/</span>
+                    <span><span class="navbar-osc-number" style="color: var(--color2)">2</span><span class="navbar-osc-division">10</span>mV/</span>
+                </div>
+                <div class="grid-navbar-osc grid-navbar-osc-2" id="osc-focus-1-7">
+                    <span><span class="navbar-osc-number" style="color: var(--color3)">3</span><span class="navbar-osc-division">100</span>mV/</span>
+                    <span><span class="navbar-osc-number" style="color: var(--color4)">4</span><span class="navbar-osc-division">10</span>mV/</span>
+                </div>
+                <div class="grid-navbar-item grid-navbar-item-last" id="osc-focus-1-8" onclick="toggleBottomBar()">
+                    <img src="Fullscreen.svg" style="width: 30px" class="navbar-item-image">
+                </div>
+            </div>
+            <div class="grid-viewport">
+                <div class="viewport-wrapper">
+                    <canvas id="osc-viewport-bg">
+        
+                    </canvas>
+                    <canvas id="osc-viewport">
+                        
+                    </canvas>
+                </div>
+            </div>
+            <div class="grid-multibar" id="osc-focus-5">
+                <div class="grid-multibar-arrow" id="multibar-osc-arrow">
+                    <div onclick="updateMultibar(OSC_MeasurementSelected - 1, 'osc')" id="osc-left">◄</div>
+                    <div onclick="updateMultibar(OSC_MeasurementSelected + 1, 'osc')" id="osc-right">►</div>
+                </div>
+            </div>
+            <div class="grid-sidebar">
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+            </div>
+            <div id="osc-scroll-bar" class="scroll-bar">
+            </div>
+        </div>
+        <div class="parent parent-sig">
+            <div class="grid-navbar" id="sig-focus-1">
+                <div class="grid-navbar-item" id="sig-focus-1-1" onclick="setPage('parent-dc')">
+                    <img src="DC.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="sig-focus-1-2" onclick="setPage('parent-osc')">
+                    <img src="Osc.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item selected focus" id="sig-focus-1-3" onclick="setPage('parent-sig')">
+                    <img src="Sig.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="sig-focus-1-4" onclick="setPage('parent-logic')">
+                    <img src="Data.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item grid-navbar-item-second-last" id="sig-focus-1-5" onclick="toggleBottomBar()">
+                    <img src="Fullscreen.svg" style="width: 30px" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item grid-navbar-item-last" id="sig-focus-1-6" onclick="setPage('parent-settings')">
+                    <img src="Settings.svg" style="width: 30px" class="navbar-item-image">
+                </div>
+            </div>
+            <div class="grid-sig-row sig-row-1" id="sig-focus-2">
+                <p class="sig-column">
+                    <span class="sig-column-type">WAVEFORM</span>
+                    <span class="sig-column-image first selected" id="sig-focus-2-1" onclick="setSelected('sig-focus-2-1', 'sig', 2, 1)"><img class="sig-icon" src="SigSine.png"></span>
+                    <span class="sig-column-image" id="sig-focus-2-2" onclick="setSelected('sig-focus-2-2', 'sig', 2, 2)"><img class="sig-icon" src="SigSqr.png"></span>
+                    <span class="sig-column-image" id="sig-focus-2-3" onclick="setSelected('sig-focus-2-3', 'sig', 2, 3)"><img class="sig-icon" src="SigRamp.png"></span>
+                </p> 
+                <div class="sig-viewport-wrapper" >
+                    <canvas id="sig-viewport" width="0" height="0" style="width: 0px; height: 0px;">
+                        
+                    </canvas>  
+                </div>  
+            </div>
+            <div class="grid-sig-row sig-row-2" id="sig-focus-3">
+                <p class="sig-column">
+                    <span class="sig-column-type">FREQUENCY</span>
+                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-3-1', 'sig', 3, 1)" id="sig-focus-3-1">20.50</span>
+                    <span class="sig-column-label">kHz</span>
+                    <span class="sig-column-type">DUTY CYCLE</span>
+                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-3-2', 'sig', 3, 2)" id="sig-focus-3-2">30.0</span>
+                    <span class="sig-column-label">%</span>
+                </p>   
+            </div>
+            <div class="grid-sig-row sig-row-3" id="sig-focus-4">
+                <p class="sig-column">
+                    <span class="sig-column-type">AMPLITUDE</span>
+                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-4-1', 'sig', 4, 1)" id="sig-focus-4-1">2.0</span>
+                    <span class="sig-column-label">V</span>
+                    <span class="sig-column-type">OFFSET</span>
+                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-4-2', 'sig', 4, 2)" id="sig-focus-4-2">30</span>
+                    <span class="sig-column-label">mV</span>
+                </p>   
+            </div>
+            <div class="grid-multibar" id="sig-focus-5">
+                <div class="grid-multibar-arrow" id="multibar-sig-arrow">
+                    <div onclick="updateMultibar(SIG_ModuleSelected - 1, 'sig')" id="sig-left">◄</div>
+                    <div onclick="updateMultibar(SIG_ModuleSelected + 1, 'sig')" id="sig-right">►</div>
+                </div>
+            </div>
+            <div class="grid-sidebar">
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+            </div>
+            <div id="sig-scroll-bar" class="scroll-bar">
+            </div>
+        </div>
+        <div class="parent parent-settings">
+            <div class="grid-navbar" id="settings-focus-1">
+                <div class="grid-navbar-item" id="settings-focus-1-1" onclick="setPage('parent-dc')">
+                    <img src="DC.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="settings-focus-1-2" onclick="setPage('parent-osc')">
+                    <img src="Osc.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="settings-focus-1-3" onclick="setPage('parent-sig')">
+                    <img src="Sig.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="settings-focus-1-4" onclick="setPage('parent-logic')">
+                    <img src="Data.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item grid-navbar-item-last selected focus" id="settings-focus-1-5" onclick="setPage('parent-settings')">
+                    <img src="Settings.svg" style="width: 30px" class="navbar-item-image">
+                </div>
+            </div>
+        </div>
+        <div id="parent-logic" class="parent parent-logic">
+            <div class="grid-navbar" id="logic-focus-1">
+                <div class="grid-navbar-item" id="logic-focus-1-1" onclick="setPage('parent-dc')">
+                    <img src="DC.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="logic-focus-1-2" onclick="setPage('parent-osc')">
+                    <img src="Osc.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item" id="logic-focus-1-3" onclick="setPage('parent-sig')">
+                    <img src="Sig.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item selected focus" id="logic-focus-1-4" onclick="setPage('parent-logic')">
+                    <img src="Data.svg" class="navbar-item-image">
+                </div>
+                <div class="grid-navbar-item grid-navbar-item-last" id="logic-focus-1-5" onclick="setPage('parent-settings')">
+                    <img src="Settings.svg" style="width: 30px" class="navbar-item-image">
+                </div>
+            </div>
+            <div class="grid-logic-row grid-logic-timediv">
+            </div>
+            <div class="grid-logic-container" id="logic-channels">
+            </div>
+            <div class="logic-arrow-container" style="display:none">
+                <div onclick="" id="logic-top">▲</div>
+                <div onclick="" id="logic-bottom">▼</div>
+            </div>
+            <div class="grid-sidebar">
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+                <div class="sidebar-element"><span>A</span></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var oscLoaded = false;
+        var sigLoaded = false;
+        var logicLoaded = true;
+        var bottomBarVisible = true;
+        var sideBarVisible = false;
+        
+        var activePage = 'dc';
+        var activeFocusRow = 1;
+        var numberOfPages = 6;
+
+        function setPage(className){
+            for (let parent of document.getElementsByClassName("parent")) {
+               parent.classList.remove("parent-active");
+            }
+            document.getElementsByClassName(className)[0].classList.add("parent-active");
+            activePage = className.replace('parent-', '');
+            if (className == 'parent-osc' && !oscLoaded) {
+                new p5(oscP5_1);
+                new p5(oscP5_2);
+                oscLoaded = true;
+            }
+            if (activePage == 'sig' && !sigLoaded) {
+                new p5(sigP5);
+                sigLoaded = true;
+
+                var focusedMultibarModule = focusTree[activePage][5 - 1][getSelectedIndexSpecificRow(5)];
+                document.getElementById('sig-focus-3-1').innerHTML = focusedMultibarModule.configuration.frequency;
+                document.getElementById('sig-focus-3-2').innerHTML = focusedMultibarModule.configuration.dutycycle;
+                document.getElementById('sig-focus-4-1').innerHTML = focusedMultibarModule.configuration.amplitude;
+                document.getElementById('sig-focus-4-2').innerHTML = focusedMultibarModule.configuration.offset;
+                
+                setSelected('sig-focus-2-1', 'sig', 2, 1, (focusedMultibarModule.configuration.type != 'SigSine'));
+                setSelected('sig-focus-2-2', 'sig', 2, 2, (focusedMultibarModule.configuration.type != 'SigSqr'));
+                setSelected('sig-focus-2-3', 'sig', 2, 3, (focusedMultibarModule.configuration.type != 'SigRamp'));
+            }
+
+            
+            for (const element of focusTree[activePage][5 - 1]) { // update the multibar of the new page in case the window was left far away from the current selection
+                if (element.isSelected()) {
+                    element.setFocus(true);
+                    updateMultibar(element.getFocusAndSubfocusNumber()[1], activePage, true);
+                    break;
+                }
+            }
+
+            for (const element of focusTree[activePage][1 - 1]) { // update the navbar to the new tab
+                if (element.defaultFocus) {
+                    element.setFocus(true);
+                }
+                else {
+                    element.setFocus(false);
+                }
+            }
+        }
+
+        function toggleBottomBar(){
+            if (bottomBarVisible) {
+                document.querySelector(':root').style.setProperty('--bottom-bar-height', '0px');
+                bottomBarVisible = false;
+            }
+            else {
+                document.querySelector(':root').style.setProperty('--bottom-bar-height', '120px');
+                bottomBarVisible = true;
+            }
+            var c = 0;
+            var interval = setInterval(() => {
+                new p5(oscP5_1);
+                c++;
+                if (c > 50) {
+                    clearInterval(interval);
+                }
+            },10);
+            new p5(oscP5_2);
+        }
+        function toggleSideBar(){
+            if (sideBarVisible) {
+                document.querySelector(':root').style.setProperty('--side-bar-height', '0px');
+                sideBarVisible = false;
+            }
+            else {
+                document.querySelector(':root').style.setProperty('--side-bar-height', '40px');
+                sideBarVisible = true;
+            }
+            oscLoaded = false;
+            var c = 0;
+            var interval = setInterval(() => {
+                new p5(oscP5_1);
+                c++;
+                if (c > 50) {
+                    clearInterval(interval);
+                }
+            },10);
+            new p5(oscP5_2);
+        }
+        window.onresize = function() {
+            location.reload();
+        };
+    </script>
+    <script>
+        DC_Modules = [];
+        DC_ModuleSelected = 0;
+        DC_MultibarWindow = [1,2,3,4];
+        OSC_Measurements = [];
+        OSC_MeasurementSelected = 0;
+        OSC_MultibarWindow = [1,2,3,4];
+        SIG_Modules = [];
+        SIG_ModuleSelected = 0;
+        SIG_MultibarWindow = [1,2,3,4];
+        LOGIC_Channels = [];
+
+        const FocusElementType = {
+            NavElement: 0,
+            NumberInput: 1,
+            ToggleInput: 2,
+            MultibarModule: 3
+        }
+
+        class FocusElement {
+            constructor(type, id, selected = false, focus = false, defaultFocus = false, configuration = {}) {
+                this.type = type;
+                this.selected = selected;
+                this.focus = focus;
+                this.defaultFocus = defaultFocus;
+                this.configuration = configuration;
+                this.id = id;
+            }
+
+            // Getter for selected
+            isSelected() {
+                return this.selected;
+            }
+
+            // Setter for selected
+            setSelected(value) {
+                this.selected = value;
+                value ? document.getElementById(this.id).classList.add('selected') : document.getElementById(this.id).classList.remove('selected');
+            }
+
+            // Setter for selected
+            applyDefault() {
+                this.focus = this.defaultFocus;
+            }
+
+            // Getter for focus
+            isFocused() {
+                return this.focus;
+            }
+
+            // Setter for focus
+            setFocus(value) {
+                this.focus = value;
+                value ? document.getElementById(this.id).classList.add('focus') : document.getElementById(this.id).classList.remove('focus');
+            }
+
+            getFocusAndSubfocusNumber() {
+                const regex = /(\d+)-(\d+)/;
+                const match = this.id.match(regex);
+                if (match) {
+                    var output = [];
+                    output[0] = parseInt(match[1]);
+                    output[1] = parseInt(match[2]);
+                    return output;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+
+        focusTree = {
+            'dc': [
+                [new FocusElement(0, 'dc-focus-1-1', true, true, true), new FocusElement(0, 'dc-focus-1-2', false, false), new FocusElement(0, 'dc-focus-1-3', false, false), new FocusElement(0, 'dc-focus-1-4', false, false), new FocusElement(0, 'dc-focus-1-5', false, false), new FocusElement(0, 'dc-focus-1-6', false, false)],
+                [new FocusElement(1, 'dc-focus-2-1', true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.5, max: 20})],
+                [new FocusElement(1, 'dc-focus-3-1', true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.1, max: 2})],
+                [],
+                [],
+                []
+            ],
+            'osc': [
+                [new FocusElement(0, 'osc-focus-1-1', false, false), new FocusElement(0, 'osc-focus-1-2', true, true, true), new FocusElement(0, 'osc-focus-1-3', false, false), new FocusElement(0, 'osc-focus-1-4', false, false), new FocusElement(0, 'osc-focus-1-5', false, false), new FocusElement(0, 'osc-focus-1-6', false, false), new FocusElement(0, 'osc-focus-1-7', false, false), new FocusElement(0, 'osc-focus-1-8', false, false)],
+                [],
+                [],
+                [],
+                [],
+                []
+            ],
+            'sig': [
+                [new FocusElement(0, 'sig-focus-1-1', false, false), new FocusElement(0, 'sig-focus-1-2', false, false), new FocusElement(0, 'sig-focus-1-3', true, true, true), new FocusElement(0, 'sig-focus-1-4', false, false), new FocusElement(0, 'sig-focus-1-5', false, false), new FocusElement(0, 'sig-focus-1-6', false, false)],
+                [new FocusElement(2, 'sig-focus-2-1', true, false, true), new FocusElement(2, 'sig-focus-2-2', false, false, false), new FocusElement(2, 'sig-focus-2-3', false, false, false)],
+                [new FocusElement(1, 'sig-focus-3-1', false, false, true, {smallStep: 0.01, bigStep: 1, decimals: 2, min: 0, max: 1000}), new FocusElement(1, 'sig-focus-3-2', false, false, false, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0, max: 100})],
+                [new FocusElement(1, 'sig-focus-4-1', false, false, true, {smallStep: 0.01, bigStep: 0.1, decimals: 2, min: 0, max: 5}), new FocusElement(1, 'sig-focus-4-2', false, false, false, {smallStep: 10, bigStep: 100, decimals: 0, min: -5000, max: 5000})],
+                [],
+                []
+            ],
+            'logic': [
+                [new FocusElement(0, 'logic-focus-1-1', false, false), new FocusElement(0, 'logic-focus-1-2', false, false), new FocusElement(0, 'logic-focus-1-3', false, false), new FocusElement(0, 'logic-focus-1-4', true, true, true), new FocusElement(0, 'logic-focus-1-5', false, false)],
+                [],
+                [],
+                [],
+                [],
+                []
+            ],
+            'settings': [
+                [new FocusElement(0, 'settings-focus-1-1', false, false), new FocusElement(0, 'settings-focus-1-2', false, false), new FocusElement(0, 'settings-focus-1-3', false, false), new FocusElement(0, 'settings-focus-1-4', false, false, false), new FocusElement(0, 'settings-focus-1-5', true, true, true)],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        }
+
+        function setSelected(id, page, focus, subfocus, remove = false){
+            remove ? document.getElementById(id).classList.remove('selected') : document.getElementById(id).classList.add('selected');
+            focusTree[page][focus - 1][subfocus - 1].setSelected(!remove);
+        }
+        function toggleSelected(id, page, focus, subfocus){
+            document.getElementById(id).classList.toggle('selected');
+            if (focusTree[page][focus - 1][subfocus - 1].isSelected()) {
+                focusTree[page][focus - 1][subfocus - 1].setSelected(false);
+            }
+            else {
+                focusTree[page][focus - 1][subfocus - 1].setSelected(true);
+            }
+        }
+
+        function getFocusElement(){
+            var focusIndex = 0;
+            for (const element of focusTree[activePage][activeFocusRow - 1]) {
+                if (element.isFocused()) {
+                    return element;
+                }
+                focusIndex++;
+            };
+            return false;
+        }
+
+        function clipNumber(number, min_value, max_value) {
+            return Math.min(Math.max(number, min_value), max_value);
+        }
+
+        /*
+            No arguments is just clicking, direction < 0 means lower the value, direction > 0 means increase
+        */
+        function interactFocusElement(direction = 0) {
+            var currentFocusElement = getFocusElement();
+            var currentFocusElementDOM = document.getElementById(currentFocusElement.id);
+            var currentFocusElementValue = parseFloat(currentFocusElementDOM.innerHTML);
+
+            if (currentFocusElement.type == FocusElementType.NavElement || currentFocusElement.type == FocusElementType.ToggleInput) { // just clicking
+                /* Special cases here */
+                if (currentFocusElement.id.includes('sig') && currentFocusElement.type == FocusElementType.ToggleInput) { // only one can be selected at any one time
+                    for (const element of focusTree[activePage][activeFocusRow - 1]) {
+                        element.setSelected(false);
+                    };
+                }
+
+                currentFocusElementDOM.click();
+            }
+            else {
+                if (direction != 0) {
+                    if (encoderButtonDown) {
+                        currentFocusElementDOM.innerHTML = clipNumber(parseFloat(currentFocusElementValue + direction * currentFocusElement.configuration.smallStep), currentFocusElement.configuration.min, currentFocusElement.configuration.max).toFixed(currentFocusElement.configuration.decimals);
+                    }
+                    else {
+                        currentFocusElementDOM.innerHTML = clipNumber(parseFloat(currentFocusElementValue + direction * currentFocusElement.configuration.bigStep), currentFocusElement.configuration.min, currentFocusElement.configuration.max).toFixed(currentFocusElement.configuration.decimals);
+                    }
+                }
+                else {
+                    currentFocusElementDOM.click();
+                }
+            }
+        }
+
+        function getFocusIndex(){
+            var focusIndex = 0;
+            for (const element of focusTree[activePage][activeFocusRow - 1]) {
+                if (element.isFocused()) {
+                    return focusIndex;
+                }
+                focusIndex++;
+            };
+            return false;
+        }
+
+        function getSelectedIndex(){
+            var selectedIndex = 0;
+            for (const element of focusTree[activePage][activeFocusRow - 1]) {
+                if (element.isSelected()) {
+                    return selectedIndex;
+                }
+                selectedIndex++;
+            };
+            return false;
+        }
+
+        function getSelectedIndexSpecificRow(row){
+            var selectedIndex = 0;
+            for (const element of focusTree[activePage][row - 1]) {
+                if (element.isSelected()) {
+                    return selectedIndex;
+                }
+                selectedIndex++;
+            };
+            return false;
+        }
+
+        function getSigTypeSelection() {
+            var output = false;
+            if (focusTree['sig'][1][0].isSelected()){
+                output = 'SigSine';
+            }
+            else if (focusTree['sig'][1][1].isSelected()){
+                output = 'SigSqr';
+            }
+            else if (focusTree['sig'][1][2].isSelected()){
+                output = 'SigRamp';
+            }
+            return output;
+        }
+
+        function changeFocus(subFocusIndex) {
+            if (!(subFocusIndex < 0 || subFocusIndex >= focusTree[activePage][activeFocusRow - 1].length)) {
+                (focusTree[activePage][activeFocusRow - 1]).forEach(element => {
+                    element.setFocus(false);
+                });
+                focusTree[activePage][activeFocusRow - 1][subFocusIndex].setFocus(true);
+
+                /* special cases */
+                if (activeFocusRow == 5) {
+                    updateMultibar(subFocusIndex + 1, activePage, true);
+                }
+            }
+        }
+
+        var pages = ['dc', 'osc', 'sig', 'logic', 'settings'];
+
+        function updateInterface(){
+            for (var i = 0; i < focusTree[activePage].length; i++) {
+                var focusRow = focusTree[activePage][i];
+                for (const focusElement of focusRow) {
+                    focusElement.setFocus(focusElement.isFocused());
+                    focusElement.setSelected(focusElement.isSelected());
+                }
+            }
+        }
+
+        function changeFocusRow(newRow) {
+            if (newRow != activeFocusRow) {
+                /*
+                reset all selected to current focussed
+                */
+                for (const element of focusTree[activePage][activeFocusRow - 1]) {
+                    /* special cases here */
+                    
+                    if (element.id.includes('sig') && element.type != FocusElementType.ToggleInput) { // state of sig toggle input has to remain
+                        if (element.type != FocusElementType.MultibarModule) {
+                            element.setSelected(false);
+                        }
+                    }
+                    element.setFocus(false);
+                    if (element.defaultFocus && element.type == FocusElementType.NavElement) {
+                        element.setSelected(true);
+                    }
+                }
+
+                activeFocusRow = newRow;
+
+                /*
+                set focus to default element
+                */
+                if (activeFocusRow == 5) { // in the case of a multibar, set the focus to the currently selected element
+                    for (const element of focusTree[activePage][activeFocusRow - 1]) {
+                        if (element.isSelected()) {
+                            element.setFocus(true);
+                            updateMultibar(element.getFocusAndSubfocusNumber()[1], activePage, true);
+                            break;
+                        }
+                    }
+                }
+                else {
+                    for (const element of focusTree[activePage][activeFocusRow - 1]) {
+                        if (element.defaultFocus) {
+                            element.setFocus(true);
+                            break;
+                        }
+                    }
+                }
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function hardwareEncoderTick(previousEncoderPosition, newEncoderPosition) {
+            var differenceEncoderPosition = (newEncoderPosition - previousEncoderPosition);
+            if (differenceEncoderPosition == 255) differenceEncoderPosition = -1;
+            if (differenceEncoderPosition == 254) differenceEncoderPosition = -2;
+            if (differenceEncoderPosition == 253) differenceEncoderPosition = -3;
+            if (differenceEncoderPosition == 252) differenceEncoderPosition = -4;
+            if (differenceEncoderPosition == -255) differenceEncoderPosition = 1;
+            if (differenceEncoderPosition == -254) differenceEncoderPosition = 2;
+            if (differenceEncoderPosition == -253) differenceEncoderPosition = 3;
+            if (differenceEncoderPosition == -252) differenceEncoderPosition = 4;
+
+            if (differenceEncoderPosition != 0) { // left rotation
+                if (activePage == 'dc') {
+                    switch (activeFocusRow) {
+                        case 1: // navbar
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 2:
+                            interactFocusElement(differenceEncoderPosition);
+                            break;
+                        case 3:
+                            interactFocusElement(differenceEncoderPosition);
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+                else if (activePage == 'osc') {
+                    switch (activeFocusRow) {
+                        case 1: // navbar
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+                else if (activePage == 'sig') {
+                    switch (activeFocusRow) {
+                        case 1: // navbar
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 2: // waveform selection
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 3: // frequency and duty cycle
+                            var foundSelectedInput = false;
+                            var selectedInput;
+                            for (const input of focusTree[activePage][activeFocusRow - 1]) {
+                                if (input.isSelected()) {
+                                    foundSelectedInput = true;
+                                    selectedInput = input;
+                                }
+                            }
+                            if (foundSelectedInput) {
+                                interactFocusElement(differenceEncoderPosition);
+                                updateDataToModule();
+                            }
+                            else {
+                                changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            }
+                            break;
+                        case 4: // amplitude and offset
+                            var foundSelectedInput = false;
+                            var selectedInput;
+                            for (const input of focusTree[activePage][activeFocusRow - 1]) {
+                                if (input.isSelected()) {
+                                    foundSelectedInput = true;
+                                    selectedInput = input;
+                                }
+                            }
+                            if (foundSelectedInput) {
+                                interactFocusElement(differenceEncoderPosition);
+                                updateDataToModule();
+                            }
+                            else {
+                                changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            }
+                            break;
+                        case 5: // multibar
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+                else if (activePage == 'logic') {
+                    switch (activeFocusRow) {
+                        case 1: // navbar
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+                else if (activePage == 'settings') {
+                    switch (activeFocusRow) {
+                        case 1: // navbar
+                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+            }
+        }
+
+        var encoderButtonDown = false;
+
+        function hardwareButtonClick(buttonNumber) {
+            switch (buttonNumber) {
+                case 1: // BTN 1
+                    toggleSideBar();
+                    break;
+                case 2: // BTN 2
+                    changeFocusRow(5);
+                    break;
+                case 3: // BTN 3
+                    if (!changeFocusRow(4)){ // returns false if it didnt change rows
+                        if (activePage == 'sig') {
+                            if (getFocusIndex() + 1 < focusTree[activePage][activeFocusRow - 1].length) {
+                                changeFocus(getFocusIndex() + 1);
+                            } else {
+                                changeFocus(getFocusIndex() - 1);
+                            }
+                        }
+                    }
+                    break;
+                case 4: // BTN 4
+                    if (!changeFocusRow(3)){ // returns false if it didnt change rows
+                        if (activePage == 'sig') {
+                            if (getFocusIndex() + 1 < focusTree[activePage][activeFocusRow - 1].length) {
+                                changeFocus(getFocusIndex() + 1);
+                            } else {
+                                changeFocus(getFocusIndex() - 1);
+                            }
+                        }
+                    }
+                    break;
+                case 5: // BTN 5
+                    changeFocusRow(2);
+                    break;
+                case 6: // BTN 6
+                    changeFocusRow(1);
+                    break;
+                case 7: // BTN ENCODER SW RELEASED
+                    interactFocusElement();
+                    encoderButtonDown = false;
+                    // find active selected element
+                    break;
+                case 8: // BTN ENCODER SW PRESSED DOWN
+                    encoderButtonDown = true;
+            }
+        }
+
+        function updateMultibarModule(id, topleft='NULL', topright='NULL', bottomleft='NULL', bottomright='NULL') {
+            if (topleft != 'NULL') {
+                document.getElementById(id + '-top-left').innerHTML = topleft;
+            }
+            if (topright != 'NULL') {
+                document.getElementById(id + '-top-right').innerHTML = topright;
+            }
+            if (bottomleft != 'NULL') {
+                document.getElementById(id + '-bottom-left').innerHTML = bottomleft;
+            }
+            if (bottomright != 'NULL') {
+                document.getElementById(id + '-bottom-right').innerHTML = bottomright;
+            }
+        }
+
+        function createOSCMeasurement(append, Value1, Type1, Value2, Type2){
+            var IdNum = (OSC_Measurements.length + 1);
+            // Create the main container div
+            var containerDiv = document.createElement('div');
+            containerDiv.className = 'grid-multibar-item';
+            containerDiv.id = 'osc-focus-5-' + IdNum;
+            if (IdNum == 1) { // first module, so we need to set this focussed
+                containerDiv.classList.add('focus');
+                containerDiv.classList.add('selected');
+            }
+            
+            var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1);
+
+            containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "osc")');
+            containerDiv.style.display = "none";
+
+            // Create the top row div
+            var topRowDiv = document.createElement('div');
+            topRowDiv.className = 'grid-multibar-item-row';
+
+            // Create the top paragraph element
+            var topParagraph = document.createElement('p');
+            topParagraph.className = 'multibar-item multibar-item-top';
+
+            // Create and append spans for A and B in the top paragraph
+            var topSpanA = document.createElement('span');
+            topSpanA.className = 'multibar-item-value';
+            topSpanA.id = 'OSC_Value_Top_' + IdNum;
+            topSpanA.innerHTML = Value1;
+
+            var topSpanB = document.createElement('span');
+            topSpanB.className = 'multibar-item-type';
+            topSpanB.id = 'OSC_Type_Top_' + IdNum;
+            topSpanB.innerHTML = Type1;
+
+            topParagraph.appendChild(topSpanA);
+            topParagraph.appendChild(topSpanB);
+
+            // Append the top paragraph to the top row div
+            topRowDiv.appendChild(topParagraph);
+
+            // Create the bottom row div
+            var bottomRowDiv = document.createElement('div');
+            bottomRowDiv.className = 'grid-multibar-item-row';
+
+            // Create the bottom paragraph element
+            var bottomParagraph = document.createElement('p');
+            bottomParagraph.className = 'multibar-item multibar-item-bottom';
+
+            // Create and append spans for C and D in the bottom paragraph
+            var bottomSpanC = document.createElement('span');
+            bottomSpanC.className = 'multibar-item-value';
+            bottomSpanC.id = 'OSC_Value_Bottom_' + IdNum;
+            bottomSpanC.innerHTML = Value2;
+
+            var bottomSpanD = document.createElement('span');
+            bottomSpanD.className = 'multibar-item-type';
+            bottomSpanD.id = 'OSC_Type_Bottom_' + IdNum;
+            bottomSpanD.innerHTML = Type2;
+
+            bottomParagraph.appendChild(bottomSpanC);
+            bottomParagraph.appendChild(bottomSpanD);
+
+            // Append the bottom paragraph to the bottom row div
+            bottomRowDiv.appendChild(bottomParagraph);
+
+            // Append the triangle, top row, and bottom row to the main container div
+            containerDiv.appendChild(topRowDiv);
+            containerDiv.appendChild(bottomRowDiv);
+
+            OSC_Measurements.push(IdNum);
+
+            if (append) {
+                document.getElementById("osc-focus-5").insertBefore(containerDiv, document.getElementById('multibar-osc-arrow'));
+                focusTree['osc'][5 - 1].push(focusElement);
+            }
+            
+            var scrollElement = document.createElement('div');
+            scrollElement.classList.add('scroll-bar-element');
+            document.getElementById('osc-scroll-bar').appendChild(scrollElement);
+        }
+
+        function createDCModule(append, Value1, Type1, Value2, Type2){
+            var IdNum = (DC_Modules.length + 1);
+            // Create the main container div
+            var containerDiv = document.createElement('div');
+            containerDiv.className = 'grid-multibar-item';
+            containerDiv.id = 'dc-focus-5-' + IdNum; //DC_module_
+            if (IdNum == 1) { // first module, so we need to set this focussed
+                containerDiv.classList.add('focus');
+                containerDiv.classList.add('selected');
+            }
+
+            var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1);
+
+            containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "dc")');
+            containerDiv.style.display = "none";
+
+            // Create the triangle div
+            var triangleDiv = document.createElement('div');
+            triangleDiv.className = 'multibar-item-triangle';
+            triangleDiv.style.borderColor = 'var(--color' + IdNum + ') transparent transparent transparent';
+
+            // Create the top row div
+            var topRowDiv = document.createElement('div');
+            topRowDiv.className = 'grid-multibar-item-row';
+
+            // Create the top paragraph element
+            var topParagraph = document.createElement('p');
+            topParagraph.className = 'multibar-item multibar-item-top';
+
+            // Create and append spans for A and B in the top paragraph
+            var topSpanA = document.createElement('span');
+            topSpanA.className = 'multibar-item-value';
+            topSpanA.id = 'DC_Value_Top_' + IdNum;
+            topSpanA.innerHTML = Value1;
+
+            var topSpanB = document.createElement('span');
+            topSpanB.className = 'multibar-item-type';
+            topSpanB.id = 'DC_Type_Top_' + IdNum;
+            topSpanB.innerHTML = Type1;
+
+            topParagraph.appendChild(topSpanA);
+            topParagraph.appendChild(topSpanB);
+
+            // Append the top paragraph to the top row div
+            topRowDiv.appendChild(topParagraph);
+
+            // Create the bottom row div
+            var bottomRowDiv = document.createElement('div');
+            bottomRowDiv.className = 'grid-multibar-item-row';
+
+            // Create the bottom paragraph element
+            var bottomParagraph = document.createElement('p');
+            bottomParagraph.className = 'multibar-item multibar-item-bottom';
+
+            // Create and append spans for C and D in the bottom paragraph
+            var bottomSpanC = document.createElement('span');
+            bottomSpanC.className = 'multibar-item-value';
+            bottomSpanC.id = 'DC_Value_Bottom_' + IdNum;
+            bottomSpanC.innerHTML = Value2;
+
+            var bottomSpanD = document.createElement('span');
+            bottomSpanD.className = 'multibar-item-type';
+            bottomSpanD.id = 'DC_Type_Bottom_' + IdNum;
+            bottomSpanD.innerHTML = Type2;
+
+            bottomParagraph.appendChild(bottomSpanC);
+            bottomParagraph.appendChild(bottomSpanD);
+
+            // Append the bottom paragraph to the bottom row div
+            bottomRowDiv.appendChild(bottomParagraph);
+
+            // Append the triangle, top row, and bottom row to the main container div
+            containerDiv.appendChild(triangleDiv);
+            containerDiv.appendChild(topRowDiv);
+            containerDiv.appendChild(bottomRowDiv);
+
+            DC_Modules.push(IdNum);
+
+            if (append) {
+                document.getElementById("dc-focus-5").insertBefore(containerDiv, document.getElementById('multibar-dc-arrow'));
+                focusTree['dc'][5 - 1].push(focusElement);
+            }
+
+            var scrollElement = document.createElement('div');
+            scrollElement.classList.add('scroll-bar-element');
+            document.getElementById('dc-scroll-bar').appendChild(scrollElement);
+        }
+    
+        function createSIGModule(append, Value1, Type1, Value2, Type2, Dutycycle, Offset){
+            IdNum = (SIG_Modules.length + 1);
+            // Create the main container div
+            var containerDiv = document.createElement('div');
+            containerDiv.className = 'grid-multibar-item';
+            containerDiv.id = 'sig-focus-5-' + IdNum;
+            if (IdNum == 1) { // first module, so we need to set this focussed
+                containerDiv.classList.add('focus');
+                containerDiv.classList.add('selected');
+            }
+            containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "sig")');
+            containerDiv.style.display = "none";
+            //'SigSine', '20.1kHz', '4.00', 'V<sub>pp</sub>'
+            var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1, {type: Value1, dutycycle: Dutycycle, offset: Offset, frequency: parseFloat(Type1.replace('kHz', '')), amplitude: parseFloat(Value2)});
+
+            // Create the triangle div
+            var triangleDiv = document.createElement('div');
+            triangleDiv.className = 'multibar-item-triangle';
+            triangleDiv.style.borderColor = 'var(--color' + IdNum + ') transparent transparent transparent';
+
+            // Create the top row div
+            var topRowDiv = document.createElement('div');
+            topRowDiv.className = 'grid-multibar-item-row';
+
+            // Create the top paragraph element
+            var topParagraph = document.createElement('p');
+            topParagraph.className = 'multibar-item multibar-item-top';
+
+            // Create and append spans for A and B in the top paragraph
+            var topSpanA = document.createElement('span');
+            topSpanA.className = 'multibar-item-value';
+            topSpanA.id = containerDiv.id + '-top-left';
+            topSpanA.innerHTML = '<img class="sig-icon" src="' + Value1 + '.png">';
+
+            var topSpanB = document.createElement('span');
+            topSpanB.className = 'multibar-item-type';
+            topSpanB.id = containerDiv.id + '-top-right';
+            topSpanB.innerHTML = Type1;
+
+            topParagraph.appendChild(topSpanA);
+            topParagraph.appendChild(topSpanB);
+
+            // Append the top paragraph to the top row div
+            topRowDiv.appendChild(topParagraph);
+
+            // Create the bottom row div
+            var bottomRowDiv = document.createElement('div');
+            bottomRowDiv.className = 'grid-multibar-item-row';
+
+            // Create the bottom paragraph element
+            var bottomParagraph = document.createElement('p');
+            bottomParagraph.className = 'multibar-item multibar-item-bottom';
+
+            // Create and append spans for C and D in the bottom paragraph
+            var bottomSpanC = document.createElement('span');
+            bottomSpanC.className = 'multibar-item-value';
+            bottomSpanC.id = containerDiv.id + '-bottom-left';
+            bottomSpanC.innerHTML = Value2;
+
+            var bottomSpanD = document.createElement('span');
+            bottomSpanD.className = 'multibar-item-type';
+            bottomSpanD.id = containerDiv.id + '-bottom-right';
+            bottomSpanD.innerHTML = Type2;
+
+            bottomParagraph.appendChild(bottomSpanC);
+            bottomParagraph.appendChild(bottomSpanD);
+
+            // Append the bottom paragraph to the bottom row div
+            bottomRowDiv.appendChild(bottomParagraph);
+
+            // Append the triangle, top row, and bottom row to the main container div
+            containerDiv.appendChild(triangleDiv);
+            containerDiv.appendChild(topRowDiv);
+            containerDiv.appendChild(bottomRowDiv);
+            SIG_Modules.push(IdNum);
+
+            if (append) {
+                document.getElementById("sig-focus-5").insertBefore(containerDiv, document.getElementById('multibar-sig-arrow'));
+                focusTree['sig'][5 - 1].push(focusElement);
+            }
+
+            var scrollElement = document.createElement('div');
+            scrollElement.classList.add('scroll-bar-element');
+            document.getElementById('sig-scroll-bar').appendChild(scrollElement);
+        }
+
+        function createLOGICChannel(labelBottom) {
+            LOGIC_Channels.push(LOGIC_Channels.length + 1);
+
+            // Create main container
+            var rowContainer = document.createElement('div');
+            rowContainer.className = 'grid-logic-row';
+
+            // Create left column
+            var leftColumn = document.createElement('div');
+            leftColumn.className = 'grid-logic-column';
+            leftColumn.style = "border-left: 5px solid var(--color" + ((LOGIC_Channels.length - 1) % 8 + 1) + ");"
+
+            // Create label containers and labels
+            var labelContainerTop = document.createElement('div');
+            labelContainerTop.className = 'grid-logic-label-container';
+            var labelTopElement = document.createElement('p');
+            labelTopElement.className = 'logic-label logic-label-top';
+            labelTopElement.textContent = "CH " + LOGIC_Channels.length;
+            labelContainerTop.appendChild(labelTopElement);
+
+            var labelContainerBottom = document.createElement('div');
+            labelContainerBottom.className = 'grid-logic-label-container';
+            var labelBottomElement = document.createElement('p');
+            labelBottomElement.className = 'logic-label logic-label-bottom';
+            labelBottomElement.innerHTML = labelBottom;
+            labelContainerBottom.appendChild(labelBottomElement);
+
+            // Append label containers to the left column
+            leftColumn.appendChild(labelContainerTop);
+            leftColumn.appendChild(labelContainerBottom);
+
+            // Create right column
+            var rightColumn = document.createElement('div');
+            rightColumn.className = 'grid-logic-column grid-logic-column-wide';
+            rightColumn.id = 'logic-column-' + LOGIC_Channels.length;
+
+            // Create canvas
+            var canvas = document.createElement('canvas');
+            canvas.className = 'logic-canvas';
+            canvas.id = 'logic-canvas-' + LOGIC_Channels.length;
+
+            // Append canvas to the right column
+            rightColumn.appendChild(canvas);
+
+            // Append left and right columns to the main container
+            rowContainer.appendChild(leftColumn);
+            rowContainer.appendChild(rightColumn);
+
+            // Return the generated element
+            document.getElementById('logic-channels').appendChild(rowContainer);
+        }
+
+        function updateLogicChannels(){
+            document.querySelector(':root').style.setProperty('--logic-number', Math.max(5,LOGIC_Channels.length));
+            const canvasList = document.getElementsByClassName('logic-canvas');
+            const columnList = document.getElementsByClassName('grid-logic-column-wide');
+
+            LOGIC_Channels.forEach(Channel => {
+                new p5((sketch)=>{logicP5(sketch, Channel)});
+            });
+        }
+
+        /*
+        Update the data shown in the multibar elements, corresponding to the newly entered data in the UI
+        */
+        function updateDataToModule() {
+            if (activePage == 'sig') {
+                var currentFocusedMultibarModule = focusTree[activePage][5 - 1][getSelectedIndexSpecificRow(5)];
+                currentFocusedMultibarModule.configuration.frequency = parseFloat(document.getElementById('sig-focus-3-1').innerHTML);
+                currentFocusedMultibarModule.configuration.dutycycle = parseFloat(document.getElementById('sig-focus-3-2').innerHTML);
+                currentFocusedMultibarModule.configuration.amplitude = parseFloat(document.getElementById('sig-focus-4-1').innerHTML);
+                currentFocusedMultibarModule.configuration.offset = parseFloat(document.getElementById('sig-focus-4-2').innerHTML);
+                currentFocusedMultibarModule.configuration.type = getSigTypeSelection();
+
+                updateMultibarModule(currentFocusedMultibarModule.id, 
+                '<img class="sig-icon" src="' + currentFocusedMultibarModule.configuration.type + '.png">', 
+                currentFocusedMultibarModule.configuration.frequency.toFixed(2) + 'kHz', 
+                currentFocusedMultibarModule.configuration.amplitude.toFixed(2),
+                'V<sub>pp</sub>');
+            }           
+        }
+
+        function updateMultibar(Updated, Module, onlyScroll = false){ 
+
+            /*
+                if (onlyScroll)
+                    step 1: reset all modules to NOT focused
+                    step 2: move FOCUS to another module, dont modify selected
+                if (!onlyScroll)
+                    step 1: reset all modules to NOT focused and NOT selected
+                    step 2: move FOCUS and selection to the designated module
+                if (DC not inside window)
+                    move the window
+                    update the visibilities
+            */
+            updateDataToModule();
+
+            if (onlyScroll == true) {
+                // step 1: reset all modules to NOT focused
+                focusTree[Module][4].forEach(element => {
+                    element.setFocus(false);
+                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
+                        element.setFocus(true);
+                    }
+                });
+            }
+            else if (onlyScroll == false) { // actual selection
+                // step 1: reset all modules to NOT focused and NOT selected
+                focusTree[Module][4].forEach(element => {
+                    element.setFocus(false);
+                    element.setSelected(false);
+                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
+                        element.setFocus(true);
+                        element.setSelected(true);
+                    }
+                });
+            }
+
+            switch (Module) {
+                case 'dc':
+                    // Make all current in window invisible
+                    for (var j = 0; j < DC_MultibarWindow.length; j++) {
+                        if (DC_Modules.includes(DC_MultibarWindow[j])) document.getElementById("dc-focus-5-" + DC_MultibarWindow[j]).style.display = "none";
+                    }
+                    // update window according to the new selection
+                    if (!DC_MultibarWindow.includes(Updated)) {      
+                        if(Math.max(...DC_MultibarWindow) < Updated) { // on the right of the current window
+                            var delta = Updated - Math.max(...DC_MultibarWindow);
+                            for (var i = 0; i < DC_MultibarWindow.length; i++) {
+                                DC_MultibarWindow[i] += delta;
+                            }
+                        }
+                        else {
+                            var delta = Math.min(...DC_MultibarWindow) - Updated;
+                            for (var i = 0; i < DC_MultibarWindow.length; i++) {
+                                DC_MultibarWindow[i] -= delta;
+                            }
+                        }
+                    }
+                    if (DC_Modules.length <= 4) {
+                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-left', 0);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-mid', DC_Modules.length);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-right', 0);
+                    }
+                    else {
+                        var left = Math.min(...DC_MultibarWindow);
+                        var right = Math.max(...DC_MultibarWindow);
+                        var index = 0;
+                        document.getElementById('dc-scroll-bar').children.forEach(child => {
+                            if ((index < left || index > left)) {
+                                child.style.opacity = "0.3";
+                                if (index == 0 || index == document.getElementById('dc-scroll-bar').children.length - 1) {
+                                    child.style.opacity = "0";
+                                }
+                            }
+                            else {
+                                child.style.opacity = "1";
+                            }
+                            index++;
+                        });
+                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-left', left - 1);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-mid', 4);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-right', DC_Modules.length - right);
+                    }
+                    // update visibility of the window
+                    for (var j = 0; j < DC_MultibarWindow.length; j++) {
+                        if (DC_Modules.includes(DC_MultibarWindow[j])) document.getElementById("dc-focus-5-" + DC_MultibarWindow[j]).style.display = "block";
+                    }
+                    DC_ModuleSelected = Updated;
+                    break;
+                case 'sig':
+                    // Make all current in window invisible
+                    for (var j = 0; j < SIG_MultibarWindow.length; j++) {
+                        if (SIG_Modules.includes(SIG_MultibarWindow[j])) document.getElementById("sig-focus-5-" + SIG_MultibarWindow[j]).style.display = "none";
+                    }
+                    // update window according to the new selection
+                    if (!SIG_MultibarWindow.includes(Updated)) {      
+                        if(Math.max(...SIG_MultibarWindow) < Updated) { // on the right of the current window
+                            var delta = Updated - Math.max(...SIG_MultibarWindow);
+                            for (var i = 0; i < SIG_MultibarWindow.length; i++) {
+                                SIG_MultibarWindow[i] += delta;
+                            }
+                        }
+                        else {
+                            var delta = Math.min(...SIG_MultibarWindow) - Updated;
+                            for (var i = 0; i < SIG_MultibarWindow.length; i++) {
+                                SIG_MultibarWindow[i] -= delta;
+                            }
+                        }
+                    }
+                    if (SIG_Modules.length <= 4) {
+                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-left', 0);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-mid', SIG_Modules.length);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-right', 0);
+                    }
+                    else {
+                        var left = Math.min(...SIG_MultibarWindow);
+                        var right = Math.max(...SIG_MultibarWindow);
+                        var index = 0;
+                        document.getElementById('sig-scroll-bar').children.forEach(child => {
+                            if ((index < left || index > left)) {
+                                child.style.opacity = "0.3";
+                                if (index == 0 || index == document.getElementById('sig-scroll-bar').children.length - 1) {
+                                    child.style.opacity = "0";
+                                }
+                            }
+                            else {
+                                child.style.opacity = "1";
+                            }
+                            index++;
+                        });
+                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-left', left - 1);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-mid', 4);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-right', SIG_Modules.length - right);
+                    }
+                    // update visibility of the window
+                    for (var j = 0; j < SIG_MultibarWindow.length; j++) {
+                        if (SIG_Modules.includes(SIG_MultibarWindow[j])) document.getElementById("sig-focus-5-" + SIG_MultibarWindow[j]).style.display = "block";
+                    }
+                    SIG_ModuleSelected = Updated;
+                    //var id = "sig-focus-5-" + SIG_ModuleSelected;
+                    focusTree[activePage][5 - 1].forEach(focus => { // find the active focusElement element, and extract the data to apply it to the UI.
+                        if (focus.id == activePage + '-focus-5-' + SIG_ModuleSelected) {
+                        }
+                    });
+                    var focusedMultibarModule = focusTree[activePage][5 - 1][getSelectedIndexSpecificRow(5)];
+                    document.getElementById('sig-focus-3-1').innerHTML = parseFloat(focusedMultibarModule.configuration.frequency).toFixed(2);
+                    document.getElementById('sig-focus-3-2').innerHTML = parseFloat(focusedMultibarModule.configuration.dutycycle).toFixed(1);
+                    document.getElementById('sig-focus-4-1').innerHTML = parseFloat(focusedMultibarModule.configuration.amplitude).toFixed(2);
+                    document.getElementById('sig-focus-4-2').innerHTML = focusedMultibarModule.configuration.offset;
+                    
+                    setSelected('sig-focus-2-1', 'sig', 2, 1, (focusedMultibarModule.configuration.type != 'SigSine'));
+                    setSelected('sig-focus-2-2', 'sig', 2, 2, (focusedMultibarModule.configuration.type != 'SigSqr'));
+                    setSelected('sig-focus-2-3', 'sig', 2, 3, (focusedMultibarModule.configuration.type != 'SigRamp'));
+                    
+                    break;
+                case 'osc':
+                    // Make all current in window invisible
+                    for (var j = 0; j < OSC_MultibarWindow.length; j++) {
+                        if (OSC_Measurements.includes(OSC_MultibarWindow[j])) document.getElementById("osc-focus-5-" + OSC_MultibarWindow[j]).style.display = "none";
+                    }
+                    // update window according to the new selection
+                    if (!OSC_MultibarWindow.includes(Updated)) {      
+                        if(Math.max(...OSC_MultibarWindow) < Updated) { // on the right of the current window
+                            var delta = Updated - Math.max(...OSC_MultibarWindow);
+                            for (var i = 0; i < OSC_MultibarWindow.length; i++) {
+                                OSC_MultibarWindow[i] += delta;
+                            }
+                        }
+                        else {
+                            var delta = Math.min(...OSC_MultibarWindow) - Updated;
+                            for (var i = 0; i < OSC_MultibarWindow.length; i++) {
+                                OSC_MultibarWindow[i] -= delta;
+                            }
+                        }
+                    }
+                    
+                    if (OSC_Measurements.length <= 4) {
+                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-left', 0);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-mid', OSC_Measurements.length);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-right', 0);
+                    }
+                    else {
+                        var left = Math.min(...OSC_MultibarWindow);
+                        var right = Math.max(...OSC_MultibarWindow);
+                        var index = 0;
+                        document.getElementById('osc-scroll-bar').children.forEach(child => {
+                            if ((index < left || index > left)) {
+                                child.style.opacity = "0.3";
+                                if (index == 0 || index == document.getElementById('osc-scroll-bar').children.length - 1) {
+                                    child.style.opacity = "0";
+                                }
+                            }
+                            else {
+                                child.style.opacity = "1";
+                            }
+                            index++;
+                        });
+                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-left', left - 1);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-mid', 4);
+                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-right', OSC_Measurements.length - right);
+                    }
+                    // update visibility of the window
+                    for (var j = 0; j < OSC_MultibarWindow.length; j++) {
+                        if (OSC_Measurements.includes(OSC_MultibarWindow[j])) document.getElementById("osc-focus-5-" + OSC_MultibarWindow[j]).style.display = "block";
+                    }
+                    OSC_MeasurementSelected = Updated;
+                    break;
+            }
+        }
+    </script>
+    <script>
+        var socket = io();
+        var receivedDataPrev = [0]; // initial value such that the first startup encoder tick does not do unwated scrolling in the UI because of differences
+        var firstTick = true;
+
+        socket.on("userInput", (arg) => {
+            var receivedData = Array.from(new Uint8Array(arg.input));
+            //console.log(receivedData.slice(0, 32).join(' '));
+            
+            // before updating the data, lets compare for the encoder data
+            if (!firstTick) {
+                hardwareEncoderTick(receivedDataPrev[0], receivedData[0]);
+            }
+            else { // always skip the first tick, since that occurs when the page gets loaded and it move the selection by one.
+                firstTick = false;
+            }
+
+            for (var buttonIndex = 1; buttonIndex < 4; buttonIndex++) {
+                if (receivedData[buttonIndex] != 0) {
+                    console.log("button " + receivedData[buttonIndex]);
+                    hardwareButtonClick(receivedData[buttonIndex]);
+                }
+            }
+            receivedDataPrev = [...receivedData];
+        });
+
+        function sendUpdate(buffer) {
+            socket.emit('update', buffer);
+        }
+
+        window.onload = function(){
+            createDCModule(true, '15.00', 'V', '10.00', 'mA');
+            createDCModule(true, '15.00', 'V', '10.00', 'mA');
+            createDCModule(true, '5.00', 'V', '10.00', 'mA');
+            createDCModule(true, '15.00', 'V', '10.00', 'mA');
+            createDCModule(true, '15.00', 'V', '10.00', 'mA');
+            createDCModule(true, '5.00', 'V', '10.00', 'mA');
+
+            createOSCMeasurement(true, 'Phase', '<span style="color: var(--color1)">1</span> → <span style="color: var(--color2)">2</span>', '30', '° (deg)');
+            createOSCMeasurement(true, 'V<sub>RMS</sub>', '<span style="color: var(--color1)">1</span>', '20.18', 'mV');
+            createOSCMeasurement(true, 'Phase', '<span style="color: var(--color1)">1</span> → <span style="color: var(--color3)">2</span>', '30', '° (deg)');
+            createOSCMeasurement(true, 'V<sub>RMS</sub>', '<span style="color: var(--color4)">1</span>', '20.18', 'mV');
+            createOSCMeasurement(true, 'Phase', '<span style="color: var(--color1)">1</span> → <span style="color: var(--color5)">2</span>', '30', '° (deg)');
+            createOSCMeasurement(true, 'V<sub>RMS</sub>', '<span style="color: var(--color6)">1</span>', '20.18', 'mV');
+
+            createSIGModule(true, 'SigSine', '20.10kHz', '4.00', 'V<sub>pp</sub>', 10, 0);
+            createSIGModule(true, 'SigSqr', '1.00kHz', '3.30', 'V<sub>pp</sub>', 10, 0);
+            createSIGModule(true, 'SigRamp', '100.00kHz', '1.00', 'V<sub>pp</sub>', 10, 0);
+            createSIGModule(true, 'SigSine', '20.10kHz', '4.00', 'V<sub>pp</sub>', 10, 0);
+            createSIGModule(true, 'SigSqr', '1.00kHz', '3.30', 'V<sub>pp</sub>', 10, 0);
+            createSIGModule(true, 'SigRamp', '10.00kHz', '1.00', 'V<sub>pp</sub>', 10, 0);
+            createSIGModule(true, 'SigSqr', '1.00kHz', '3.30', 'V<sub>pp</sub>', 10, 0);
+            createSIGModule(true, 'SigRamp', '10.00kHz', '1.00', 'V<sub>pp</sub>', 10, 0);
+
+            createLOGICChannel("I<sup>2</sup>C SDA");
+            createLOGICChannel("I<sup>2</sup>C SCL");
+            createLOGICChannel("I<sup>2</sup>C SDA");
+            createLOGICChannel("I<sup>2</sup>C SCL");
+            createLOGICChannel("I<sup>2</sup>C SDA");
+            createLOGICChannel("I<sup>2</sup>C SCL");
+            createLOGICChannel("I<sup>2</sup>C SDA");
+            createLOGICChannel("I<sup>2</sup>C SCL");
+            createLOGICChannel("I<sup>2</sup>C SDA");
+            createLOGICChannel("I<sup>2</sup>C SCL");
+
+            updateLogicChannels();
+
+            updateMultibar(1, 'dc');
+            updateMultibar(1, 'osc');
+            updateMultibar(1, 'sig');
+        }
+    </script>
+</body>
+</html>
