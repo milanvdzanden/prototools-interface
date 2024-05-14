@@ -20,7 +20,6 @@ io.on('connection', (socket) => {
 	socket.on('update', (message) => {
 		txBuffer = message;
 		txAvailable = true;
-		console.log(txBuffer)
 	});
 });
 
@@ -34,8 +33,8 @@ server.listen(3000, () => {
 });
 
 function bufferToHex(buffer){
-	let hexString = buffer.map(byte => '0x' + byte.toString(16).padStart(2,'0'));
-	return hexString.join(' ');
+  let hexString = buffer.map(byte => '0x' + byte.toString(16).padStart(2,'0'));
+  return hexString.join(' ');
 }
 
 function bufferCompare(buffer1, buffer2, length) {
@@ -62,7 +61,7 @@ let prevBuffer;
 const rbuf = Buffer.alloc(BUF_SIZE);
 i2c.openPromisified(11).
 then(i2c11 => interval = setInterval(function(){
-	i2c11.i2cRead(SLAVE_ADDR, rbuf.length, rbuf).then(data => {
+  	i2c11.i2cRead(SLAVE_ADDR, rbuf.length, rbuf).then(data => {
 		var input = data.buffer;
 		if (socketConnected /*&& !bufferCompare(Array.from(new Uint8Array(input)), Array.from(new Uint8Array(prevBuffer)), BUF_SIZE)*/) { // dont print if it is the same state to save bandwidth
 
@@ -89,9 +88,3 @@ then(i2c11 => interval = setInterval(function(){
 		}
 	});
 },50));
-
-try {
-
-} catch (error) {
-	console.log("I2C could not be setup, try again..")
-}
