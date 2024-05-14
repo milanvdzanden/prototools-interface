@@ -90,5 +90,5 @@ try {
 		});
 	},50));
 } catch (error) {
-	console.log("I2C could not be setup, try again.")
+	console.log("I2C could not be setup, try again..")
 }
