@@ -11,7 +11,8 @@ function createSIGModule(append, Value1, Type1, Value2, Type2, Dutycycle, Offset
     containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "sig")');
     containerDiv.style.display = "none";
     //'SigSine', '20.1kHz', '4.00', 'V<sub>pp</sub>'
-    var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1, {type: Value1, dutycycle: Dutycycle, offset: Offset, frequency: parseFloat(Type1.replace('kHz', '')), amplitude: parseFloat(Value2)});
+    var focusElement = new FocusElement(3, containerDiv.id, uuidv4(), false, IdNum == 1, IdNum == 1, {type: Value1, dutycycle: Dutycycle, offset: Offset, frequency: parseFloat(Type1.replace('kHz', '')), amplitude: parseFloat(Value2)});
+    containerDiv.setAttribute('uid', focusElement.uid);
 
     // Create the triangle div
     var triangleDiv = document.createElement('div');

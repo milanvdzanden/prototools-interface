@@ -9,9 +9,10 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
         containerDiv.classList.add('selected');
     }
 
-    var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1);
+    var focusElement = new FocusElement(3, containerDiv.id, uuidv4(), false, IdNum == 1, IdNum == 1);
+    containerDiv.setAttribute('uid', focusElement.uid);
 
-    containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "dc")');
+    containerDiv.setAttribute('onclick', 'updateMultibar(getElementMultibarNumber(\'' + focusElement.uid + '\'), "dc")');
     containerDiv.style.display = "none";
 
     // Create the triangle div

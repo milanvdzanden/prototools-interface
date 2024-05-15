@@ -403,13 +403,14 @@
         }
 
         class FocusElement {
-            constructor(type, id, selected = false, focus = false, defaultFocus = false, configuration = {}) {
+            constructor(type, id, uid, selected = false, focus = false, defaultFocus = false, configuration = {}) {
                 this.type = type;
                 this.selected = selected;
                 this.focus = focus;
                 this.defaultFocus = defaultFocus;
                 this.configuration = configuration;
                 this.id = id;
+                this.uid = uid;
             }
 
             // Getter for selected
@@ -456,15 +457,15 @@
 
         focusTree = {
             'dc': [
-                [new FocusElement(0, 'dc-focus-1-1', true, true, true), new FocusElement(0, 'dc-focus-1-2', false, false), new FocusElement(0, 'dc-focus-1-3', false, false), new FocusElement(0, 'dc-focus-1-4', false, false), new FocusElement(0, 'dc-focus-1-5', false, false), new FocusElement(0, 'dc-focus-1-6', false, false)],
-                [new FocusElement(1, 'dc-focus-2-1', true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.5, max: 20})],
-                [new FocusElement(1, 'dc-focus-3-1', true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.1, max: 2})],
+                [new FocusElement(0, 'dc-focus-1-1', uuidv4(), true, true, true), new FocusElement(0, 'dc-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-4', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-5', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-6', uuidv4(), false, false)],
+                [new FocusElement(1, 'dc-focus-2-1', uuidv4(), true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.5, max: 20})],
+                [new FocusElement(1, 'dc-focus-3-1', uuidv4(), true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.1, max: 2})],
                 [],
                 [],
                 []
             ],
             'osc': [
-                [new FocusElement(0, 'osc-focus-1-1', false, false), new FocusElement(0, 'osc-focus-1-2', true, true, true), new FocusElement(0, 'osc-focus-1-3', false, false), new FocusElement(0, 'osc-focus-1-4', false, false), new FocusElement(0, 'osc-focus-1-5', false, false), new FocusElement(0, 'osc-focus-1-6', false, false), new FocusElement(0, 'osc-focus-1-7', false, false), new FocusElement(0, 'osc-focus-1-8', false, false)],
+                [new FocusElement(0, 'osc-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-2', uuidv4(), true, true, true), new FocusElement(0, 'osc-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-4', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-5', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-6', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-7', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-8', uuidv4(), false, false)],
                 [],
                 [],
                 [],
@@ -472,15 +473,15 @@
                 []
             ],
             'sig': [
-                [new FocusElement(0, 'sig-focus-1-1', false, false), new FocusElement(0, 'sig-focus-1-2', false, false), new FocusElement(0, 'sig-focus-1-3', true, true, true), new FocusElement(0, 'sig-focus-1-4', false, false), new FocusElement(0, 'sig-focus-1-5', false, false), new FocusElement(0, 'sig-focus-1-6', false, false)],
-                [new FocusElement(2, 'sig-focus-2-1', true, false, true), new FocusElement(2, 'sig-focus-2-2', false, false, false), new FocusElement(2, 'sig-focus-2-3', false, false, false)],
-                [new FocusElement(1, 'sig-focus-3-1', false, false, true, {smallStep: 0.01, bigStep: 1, decimals: 2, min: 0, max: 1000}), new FocusElement(1, 'sig-focus-3-2', false, false, false, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0, max: 100})],
-                [new FocusElement(1, 'sig-focus-4-1', false, false, true, {smallStep: 0.01, bigStep: 0.1, decimals: 2, min: 0, max: 5}), new FocusElement(1, 'sig-focus-4-2', false, false, false, {smallStep: 10, bigStep: 100, decimals: 0, min: -5000, max: 5000})],
+                [new FocusElement(0, 'sig-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-3', uuidv4(), true, true, true), new FocusElement(0, 'sig-focus-1-4', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-5', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-6', uuidv4(), false, false)],
+                [new FocusElement(2, 'sig-focus-2-1', uuidv4(), true, false, true), new FocusElement(2, 'sig-focus-2-2', uuidv4(), false, false, false), new FocusElement(2, 'sig-focus-2-3', uuidv4(), false, false, false)],
+                [new FocusElement(1, 'sig-focus-3-1', uuidv4(), false, false, true, {smallStep: 0.01, bigStep: 1, decimals: 2, min: 0, max: 1000}), new FocusElement(1, 'sig-focus-3-2', uuidv4(), false, false, false, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0, max: 100})],
+                [new FocusElement(1, 'sig-focus-4-1', uuidv4(), false, false, true, {smallStep: 0.01, bigStep: 0.1, decimals: 2, min: 0, max: 5}), new FocusElement(1, 'sig-focus-4-2', uuidv4(), false, false, false, {smallStep: 10, bigStep: 100, decimals: 0, min: -5000, max: 5000})],
                 [],
                 []
             ],
             'logic': [
-                [new FocusElement(0, 'logic-focus-1-1', false, false), new FocusElement(0, 'logic-focus-1-2', false, false), new FocusElement(0, 'logic-focus-1-3', false, false), new FocusElement(0, 'logic-focus-1-4', true, true, true), new FocusElement(0, 'logic-focus-1-5', false, false)],
+                [new FocusElement(0, 'logic-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'logic-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'logic-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'logic-focus-1-4', uuidv4(), true, true, true), new FocusElement(0, 'logic-focus-1-5', uuidv4(), false, false)],
                 [],
                 [],
                 [],
@@ -488,7 +489,7 @@
                 []
             ],
             'settings': [
-                [new FocusElement(0, 'settings-focus-1-1', false, false), new FocusElement(0, 'settings-focus-1-2', false, false), new FocusElement(0, 'settings-focus-1-3', false, false), new FocusElement(0, 'settings-focus-1-4', false, false, false), new FocusElement(0, 'settings-focus-1-5', true, true, true)],
+                [new FocusElement(0, 'settings-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'settings-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'settings-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'settings-focus-1-4', uuidv4(), false, false, false), new FocusElement(0, 'settings-focus-1-5', uuidv4(), true, true, true)],
                 [],
                 [],
                 [],
@@ -699,6 +700,7 @@
                         case 4:
                             break;
                         case 5:
+                            console.log(getFocusIndex(), getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition))
                             changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
                             break;
                         case 6:
@@ -901,6 +903,79 @@
         }
 
         /*
+            When inputting for example: dc-focus-etc it will return dc (the prefix)
+        */
+        function getPrefix(className) {
+            const match = className.match(/^[^-]+/);
+            return match ? match[0] : null;
+        }
+
+        /*
+            Remove Module with a specific Uid and update all other UI elements as well to reflect that
+        */
+        function removeElementByUid(Uid) {
+            const elements = document.querySelectorAll('[uid="' + Uid + '"]');
+
+            var prefix = getPrefix(elements[0].id);
+            var parent = document.getElementById(prefix + '-focus-5');
+            var newFocusIndex = 1;
+            var oldElementNumberInDCModules;
+
+            var ModuleSelectedId = document.getElementById(focusTree[prefix][4][DC_ModuleSelected - 1].id).getAttribute('uid');
+
+            parent.children.forEach(child => {
+                if (child.getAttribute('uid') == Uid) {
+                    oldElementIndexInDCModules = newFocusIndex - 1;
+                }
+            });
+            elements[0].parentNode.removeChild(elements[0]);
+            focusTree[prefix][4] = focusTree[prefix][4].filter(item => item.uid != Uid);
+            parent.children.forEach(child => {
+                if (child.getAttribute('uid')) {
+                    child.id = prefix + '-focus-5-' + newFocusIndex.toString();
+                    focusTree[prefix][4][newFocusIndex - 1].id = prefix + '-focus-5-' + newFocusIndex.toString();
+                }
+                newFocusIndex++;
+            });
+            DC_Modules.pop();
+            document.getElementById('dc-scroll-bar').removeChild(document.getElementById('dc-scroll-bar').children[0]);
+            
+            try {
+                DC_ModuleSelected = getElementMultibarNumber(ModuleSelectedId);
+            } catch (e) {}
+            updateMultibar(DC_ModuleSelected, prefix);
+        }
+
+        /*
+            Returns the number / rank / index of the element with the specific given Uid
+        */
+        function getElementMultibarNumber(Uid) {
+            const elements = document.querySelectorAll('[uid="' + Uid + '"]');
+            var prefix = getPrefix(elements[0].id);
+            var parent = document.getElementById(prefix + '-focus-5');
+            var output = -1;
+
+            var currentCounter = 1;
+            parent.children.forEach(child => {
+                if (child.getAttribute('uid') == Uid) {
+                    output = currentCounter;
+                }
+                currentCounter++;
+            });
+
+            return output;
+        }
+
+        /*
+            Generates a random uuid
+        */
+        function uuidv4() {
+            return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+              (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+            );
+        }
+
+        /*
             Function that changes the currently focussed/selected multibar item to one with id 'Updated', and scrolls the window of 4 to keep the selection visible
         */
         function updateMultibar(Updated, Module, onlyScroll = false){ 
@@ -917,27 +992,6 @@
                     update the visibilities
             */
             updateDataToModule();
-
-            if (onlyScroll == true) {
-                // step 1: reset all modules to NOT focused
-                focusTree[Module][4].forEach(element => {
-                    element.setFocus(false);
-                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
-                        element.setFocus(true);
-                    }
-                });
-            }
-            else if (onlyScroll == false) { // actual selection
-                // step 1: reset all modules to NOT focused and NOT selected
-                focusTree[Module][4].forEach(element => {
-                    element.setFocus(false);
-                    element.setSelected(false);
-                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
-                        element.setFocus(true);
-                        element.setSelected(true);
-                    }
-                });
-            }
 
             switch (Module) {
                 case 'dc':
@@ -1122,6 +1176,27 @@
                     }
                     OSC_MeasurementSelected = Updated;
                     break;
+            }
+
+            if (onlyScroll == true) {
+                // step 1: reset all modules to NOT focused
+                focusTree[Module][4].forEach(element => {
+                    element.setFocus(false);
+                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
+                        element.setFocus(true);
+                    }
+                });
+            }
+            else if (onlyScroll == false) { // actual selection
+                // step 1: reset all modules to NOT focused and NOT selected
+                focusTree[Module][4].forEach(element => {
+                    element.setFocus(false);
+                    element.setSelected(false);
+                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
+                        element.setFocus(true);
+                        element.setSelected(true);
+                    }
+                });
             }
         }
     </script>
