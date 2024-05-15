@@ -50,7 +50,7 @@ var oscP5_2 = function( sketch ) {
         dynamicWidth = viewport.clientWidth;
         dynamicHeight = viewport.clientHeight;
         let cnv2 = sketch.createCanvas(dynamicWidth, dynamicHeight, oscCanvas);
-        sketch.frameRate(10);
+        sketch.frameRate(2);
     }
 
     sketch.draw = function(){
