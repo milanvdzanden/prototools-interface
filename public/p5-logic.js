@@ -34,7 +34,7 @@ var logicP5 = function( sketch, Id ) {
         dynamicHeight = column.clientHeight;
         height = dynamicHeight;
         let cnv2 = sketch.createCanvas(dynamicWidth, dynamicHeight, oscCanvas);
-        sketch.frameRate(10);
+        sketch.frameRate(2);
     }
 
     sketch.draw = function(){

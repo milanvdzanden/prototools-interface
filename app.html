@@ -941,6 +941,11 @@
 
             switch (Module) {
                 case 'dc':
+                    if (!DC_Modules.includes(Updated))
+                    {
+                        return false;
+                    }
+
                     // Make all current in window invisible
                     for (var j = 0; j < DC_MultibarWindow.length; j++) {
                         if (DC_Modules.includes(DC_MultibarWindow[j])) document.getElementById("dc-focus-5-" + DC_MultibarWindow[j]).style.display = "none";
@@ -992,6 +997,10 @@
                     DC_ModuleSelected = Updated;
                     break;
                 case 'sig':
+                    if (!SIG_Modules.includes(Updated))
+                    {
+                        return false;
+                    }
                     // Make all current in window invisible
                     for (var j = 0; j < SIG_MultibarWindow.length; j++) {
                         if (SIG_Modules.includes(SIG_MultibarWindow[j])) document.getElementById("sig-focus-5-" + SIG_MultibarWindow[j]).style.display = "none";
@@ -1058,6 +1067,10 @@
                     
                     break;
                 case 'osc':
+                    if (!OSC_Measurements.includes(Updated))
+                    {
+                        return false;
+                    }
                     // Make all current in window invisible
                     for (var j = 0; j < OSC_MultibarWindow.length; j++) {
                         if (OSC_Measurements.includes(OSC_MultibarWindow[j])) document.getElementById("osc-focus-5-" + OSC_MultibarWindow[j]).style.display = "none";

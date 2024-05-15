@@ -9,7 +9,7 @@ var sigP5 = function( sketch ) {
         dynamicHeight = column.clientHeight;
         console.log(dynamicWidth, dynamicHeight);
         cnv = sketch.createCanvas(dynamicWidth, dynamicHeight, sigCanvas);
-        sketch.frameRate(10);
+        sketch.frameRate(2);
     }
 
     sketch.draw = function(){
