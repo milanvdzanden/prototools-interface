@@ -1,5 +1,9 @@
 <!--
     TODO:
+
+    cd Documents/Milan/prototools-interface
+    git pull
+    node index.js
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -11,13 +15,20 @@
     <!--<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
     <!--<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">-->
     <script src="/socket.io/socket.io.min.js"></script>
+    
+    <script type="text/javascript" src="/exceptions.js"></script>
+
+    <script type="text/javascript" src="/module-sig.js"></script>
+    <script type="text/javascript" src="/module-osc.js"></script>
+    <script type="text/javascript" src="/module-logic.js"></script>
+    <script type="text/javascript" src="/module-dc.js"></script>
     <title>ProtoStack</title>
 </head>
 <body>
     <script src="/p5.min.js"></script>
-    <script src="/osc.js"></script>
-    <script src="/logic.js"></script>
-    <script src="/sig.js"></script>
+    <script src="/p5-osc.js"></script>
+    <script src="/p5-logic.js"></script>
+    <script src="/p5-sig.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <div id="overlay">
         <div class="parent parent-dc parent-active">
@@ -320,6 +331,9 @@
             }
         }
 
+        /*
+            Toggles the visibility of the bottom bar / multibar
+        */
         function toggleBottomBar(){
             if (bottomBarVisible) {
                 document.querySelector(':root').style.setProperty('--bottom-bar-height', '0px');
@@ -339,6 +353,10 @@
             },10);
             new p5(oscP5_2);
         }
+        
+        /*
+            Toggles the visibility of the side bar 
+        */
         function toggleSideBar(){
             if (sideBarVisible) {
                 document.querySelector(':root').style.setProperty('--side-bar-height', '0px');
@@ -359,21 +377,23 @@
             },10);
             new p5(oscP5_2);
         }
-        window.onresize = function() {
-            location.reload();
-        };
     </script>
     <script>
         DC_Modules = [];
         DC_ModuleSelected = 0;
         DC_MultibarWindow = [1,2,3,4];
+
         OSC_Measurements = [];
         OSC_MeasurementSelected = 0;
         OSC_MultibarWindow = [1,2,3,4];
+
         SIG_Modules = [];
         SIG_ModuleSelected = 0;
         SIG_MultibarWindow = [1,2,3,4];
+
         LOGIC_Channels = [];
+
+        var pages = ['dc', 'osc', 'sig', 'logic', 'settings'];
 
         const FocusElementType = {
             NavElement: 0,
@@ -481,6 +501,7 @@
             remove ? document.getElementById(id).classList.remove('selected') : document.getElementById(id).classList.add('selected');
             focusTree[page][focus - 1][subfocus - 1].setSelected(!remove);
         }
+        
         function toggleSelected(id, page, focus, subfocus){
             document.getElementById(id).classList.toggle('selected');
             if (focusTree[page][focus - 1][subfocus - 1].isSelected()) {
@@ -507,7 +528,7 @@
         }
 
         /*
-            No arguments is just clicking, direction < 0 means lower the value, direction > 0 means increase
+            No arguments is just clicking (= 0), direction < 0 means lower the value, direction > 0 means increase
         */
         function interactFocusElement(direction = 0) {
             var currentFocusElement = getFocusElement();
@@ -539,6 +560,9 @@
             }
         }
 
+        /*
+            Get the index of the current element in "focusTree" that has focus
+        */
         function getFocusIndex(){
             var focusIndex = 0;
             for (const element of focusTree[activePage][activeFocusRow - 1]) {
@@ -550,6 +574,9 @@
             return false;
         }
 
+        /*
+            Get the index of the current element in "focusTree" that is selected
+        */        
         function getSelectedIndex(){
             var selectedIndex = 0;
             for (const element of focusTree[activePage][activeFocusRow - 1]) {
@@ -560,7 +587,10 @@
             };
             return false;
         }
-
+        
+        /*
+            Get the index of the current element in "focusTree" in the given row that is currently selected
+        */
         function getSelectedIndexSpecificRow(row){
             var selectedIndex = 0;
             for (const element of focusTree[activePage][row - 1]) {
@@ -572,20 +602,9 @@
             return false;
         }
 
-        function getSigTypeSelection() {
-            var output = false;
-            if (focusTree['sig'][1][0].isSelected()){
-                output = 'SigSine';
-            }
-            else if (focusTree['sig'][1][1].isSelected()){
-                output = 'SigSqr';
-            }
-            else if (focusTree['sig'][1][2].isSelected()){
-                output = 'SigRamp';
-            }
-            return output;
-        }
-
+        /*
+            Change the element that has focus within the currently selected row, on the active page
+        */
         function changeFocus(subFocusIndex) {
             if (!(subFocusIndex < 0 || subFocusIndex >= focusTree[activePage][activeFocusRow - 1].length)) {
                 (focusTree[activePage][activeFocusRow - 1]).forEach(element => {
@@ -600,18 +619,9 @@
             }
         }
 
-        var pages = ['dc', 'osc', 'sig', 'logic', 'settings'];
-
-        function updateInterface(){
-            for (var i = 0; i < focusTree[activePage].length; i++) {
-                var focusRow = focusTree[activePage][i];
-                for (const focusElement of focusRow) {
-                    focusElement.setFocus(focusElement.isFocused());
-                    focusElement.setSelected(focusElement.isSelected());
-                }
-            }
-        }
-
+        /*
+            Change the row that is currently focussed i.e. the row you can modify with the encoder input. newRow starts at 1
+        */
         function changeFocusRow(newRow) {
             if (newRow != activeFocusRow) {
                 /*
@@ -660,6 +670,9 @@
             }
         }
 
+        /*
+            Function that processes the encoder rotations, and moves the focus to the correct element
+        */
         function hardwareEncoderTick(previousEncoderPosition, newEncoderPosition) {
             var differenceEncoderPosition = (newEncoderPosition - previousEncoderPosition);
             if (differenceEncoderPosition == 255) differenceEncoderPosition = -1;
@@ -798,6 +811,9 @@
 
         var encoderButtonDown = false;
 
+        /*
+            Function that processes the button inputs as well as the encoder built-in switch
+        */
         function hardwareButtonClick(buttonNumber) {
             switch (buttonNumber) {
                 case 1: // BTN 1
@@ -844,6 +860,9 @@
             }
         }
 
+        /*
+            Function to update the text/html of a multibar item, could for example be called when the value is updated with the encoder, and is mirrored to the multibar
+        */
         function updateMultibarModule(id, topleft='NULL', topright='NULL', bottomleft='NULL', bottomright='NULL') {
             if (topleft != 'NULL') {
                 document.getElementById(id + '-top-left').innerHTML = topleft;
@@ -859,326 +878,8 @@
             }
         }
 
-        function createOSCMeasurement(append, Value1, Type1, Value2, Type2){
-            var IdNum = (OSC_Measurements.length + 1);
-            // Create the main container div
-            var containerDiv = document.createElement('div');
-            containerDiv.className = 'grid-multibar-item';
-            containerDiv.id = 'osc-focus-5-' + IdNum;
-            if (IdNum == 1) { // first module, so we need to set this focussed
-                containerDiv.classList.add('focus');
-                containerDiv.classList.add('selected');
-            }
-            
-            var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1);
-
-            containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "osc")');
-            containerDiv.style.display = "none";
-
-            // Create the top row div
-            var topRowDiv = document.createElement('div');
-            topRowDiv.className = 'grid-multibar-item-row';
-
-            // Create the top paragraph element
-            var topParagraph = document.createElement('p');
-            topParagraph.className = 'multibar-item multibar-item-top';
-
-            // Create and append spans for A and B in the top paragraph
-            var topSpanA = document.createElement('span');
-            topSpanA.className = 'multibar-item-value';
-            topSpanA.id = 'OSC_Value_Top_' + IdNum;
-            topSpanA.innerHTML = Value1;
-
-            var topSpanB = document.createElement('span');
-            topSpanB.className = 'multibar-item-type';
-            topSpanB.id = 'OSC_Type_Top_' + IdNum;
-            topSpanB.innerHTML = Type1;
-
-            topParagraph.appendChild(topSpanA);
-            topParagraph.appendChild(topSpanB);
-
-            // Append the top paragraph to the top row div
-            topRowDiv.appendChild(topParagraph);
-
-            // Create the bottom row div
-            var bottomRowDiv = document.createElement('div');
-            bottomRowDiv.className = 'grid-multibar-item-row';
-
-            // Create the bottom paragraph element
-            var bottomParagraph = document.createElement('p');
-            bottomParagraph.className = 'multibar-item multibar-item-bottom';
-
-            // Create and append spans for C and D in the bottom paragraph
-            var bottomSpanC = document.createElement('span');
-            bottomSpanC.className = 'multibar-item-value';
-            bottomSpanC.id = 'OSC_Value_Bottom_' + IdNum;
-            bottomSpanC.innerHTML = Value2;
-
-            var bottomSpanD = document.createElement('span');
-            bottomSpanD.className = 'multibar-item-type';
-            bottomSpanD.id = 'OSC_Type_Bottom_' + IdNum;
-            bottomSpanD.innerHTML = Type2;
-
-            bottomParagraph.appendChild(bottomSpanC);
-            bottomParagraph.appendChild(bottomSpanD);
-
-            // Append the bottom paragraph to the bottom row div
-            bottomRowDiv.appendChild(bottomParagraph);
-
-            // Append the triangle, top row, and bottom row to the main container div
-            containerDiv.appendChild(topRowDiv);
-            containerDiv.appendChild(bottomRowDiv);
-
-            OSC_Measurements.push(IdNum);
-
-            if (append) {
-                document.getElementById("osc-focus-5").insertBefore(containerDiv, document.getElementById('multibar-osc-arrow'));
-                focusTree['osc'][5 - 1].push(focusElement);
-            }
-            
-            var scrollElement = document.createElement('div');
-            scrollElement.classList.add('scroll-bar-element');
-            document.getElementById('osc-scroll-bar').appendChild(scrollElement);
-        }
-
-        function createDCModule(append, Value1, Type1, Value2, Type2){
-            var IdNum = (DC_Modules.length + 1);
-            // Create the main container div
-            var containerDiv = document.createElement('div');
-            containerDiv.className = 'grid-multibar-item';
-            containerDiv.id = 'dc-focus-5-' + IdNum; //DC_module_
-            if (IdNum == 1) { // first module, so we need to set this focussed
-                containerDiv.classList.add('focus');
-                containerDiv.classList.add('selected');
-            }
-
-            var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1);
-
-            containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "dc")');
-            containerDiv.style.display = "none";
-
-            // Create the triangle div
-            var triangleDiv = document.createElement('div');
-            triangleDiv.className = 'multibar-item-triangle';
-            triangleDiv.style.borderColor = 'var(--color' + IdNum + ') transparent transparent transparent';
-
-            // Create the top row div
-            var topRowDiv = document.createElement('div');
-            topRowDiv.className = 'grid-multibar-item-row';
-
-            // Create the top paragraph element
-            var topParagraph = document.createElement('p');
-            topParagraph.className = 'multibar-item multibar-item-top';
-
-            // Create and append spans for A and B in the top paragraph
-            var topSpanA = document.createElement('span');
-            topSpanA.className = 'multibar-item-value';
-            topSpanA.id = 'DC_Value_Top_' + IdNum;
-            topSpanA.innerHTML = Value1;
-
-            var topSpanB = document.createElement('span');
-            topSpanB.className = 'multibar-item-type';
-            topSpanB.id = 'DC_Type_Top_' + IdNum;
-            topSpanB.innerHTML = Type1;
-
-            topParagraph.appendChild(topSpanA);
-            topParagraph.appendChild(topSpanB);
-
-            // Append the top paragraph to the top row div
-            topRowDiv.appendChild(topParagraph);
-
-            // Create the bottom row div
-            var bottomRowDiv = document.createElement('div');
-            bottomRowDiv.className = 'grid-multibar-item-row';
-
-            // Create the bottom paragraph element
-            var bottomParagraph = document.createElement('p');
-            bottomParagraph.className = 'multibar-item multibar-item-bottom';
-
-            // Create and append spans for C and D in the bottom paragraph
-            var bottomSpanC = document.createElement('span');
-            bottomSpanC.className = 'multibar-item-value';
-            bottomSpanC.id = 'DC_Value_Bottom_' + IdNum;
-            bottomSpanC.innerHTML = Value2;
-
-            var bottomSpanD = document.createElement('span');
-            bottomSpanD.className = 'multibar-item-type';
-            bottomSpanD.id = 'DC_Type_Bottom_' + IdNum;
-            bottomSpanD.innerHTML = Type2;
-
-            bottomParagraph.appendChild(bottomSpanC);
-            bottomParagraph.appendChild(bottomSpanD);
-
-            // Append the bottom paragraph to the bottom row div
-            bottomRowDiv.appendChild(bottomParagraph);
-
-            // Append the triangle, top row, and bottom row to the main container div
-            containerDiv.appendChild(triangleDiv);
-            containerDiv.appendChild(topRowDiv);
-            containerDiv.appendChild(bottomRowDiv);
-
-            DC_Modules.push(IdNum);
-
-            if (append) {
-                document.getElementById("dc-focus-5").insertBefore(containerDiv, document.getElementById('multibar-dc-arrow'));
-                focusTree['dc'][5 - 1].push(focusElement);
-            }
-
-            var scrollElement = document.createElement('div');
-            scrollElement.classList.add('scroll-bar-element');
-            document.getElementById('dc-scroll-bar').appendChild(scrollElement);
-        }
-    
-        function createSIGModule(append, Value1, Type1, Value2, Type2, Dutycycle, Offset){
-            IdNum = (SIG_Modules.length + 1);
-            // Create the main container div
-            var containerDiv = document.createElement('div');
-            containerDiv.className = 'grid-multibar-item';
-            containerDiv.id = 'sig-focus-5-' + IdNum;
-            if (IdNum == 1) { // first module, so we need to set this focussed
-                containerDiv.classList.add('focus');
-                containerDiv.classList.add('selected');
-            }
-            containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "sig")');
-            containerDiv.style.display = "none";
-            //'SigSine', '20.1kHz', '4.00', 'V<sub>pp</sub>'
-            var focusElement = new FocusElement(3, containerDiv.id, false, IdNum == 1, IdNum == 1, {type: Value1, dutycycle: Dutycycle, offset: Offset, frequency: parseFloat(Type1.replace('kHz', '')), amplitude: parseFloat(Value2)});
-
-            // Create the triangle div
-            var triangleDiv = document.createElement('div');
-            triangleDiv.className = 'multibar-item-triangle';
-            triangleDiv.style.borderColor = 'var(--color' + IdNum + ') transparent transparent transparent';
-
-            // Create the top row div
-            var topRowDiv = document.createElement('div');
-            topRowDiv.className = 'grid-multibar-item-row';
-
-            // Create the top paragraph element
-            var topParagraph = document.createElement('p');
-            topParagraph.className = 'multibar-item multibar-item-top';
-
-            // Create and append spans for A and B in the top paragraph
-            var topSpanA = document.createElement('span');
-            topSpanA.className = 'multibar-item-value';
-            topSpanA.id = containerDiv.id + '-top-left';
-            topSpanA.innerHTML = '<img class="sig-icon" src="' + Value1 + '.png">';
-
-            var topSpanB = document.createElement('span');
-            topSpanB.className = 'multibar-item-type';
-            topSpanB.id = containerDiv.id + '-top-right';
-            topSpanB.innerHTML = Type1;
-
-            topParagraph.appendChild(topSpanA);
-            topParagraph.appendChild(topSpanB);
-
-            // Append the top paragraph to the top row div
-            topRowDiv.appendChild(topParagraph);
-
-            // Create the bottom row div
-            var bottomRowDiv = document.createElement('div');
-            bottomRowDiv.className = 'grid-multibar-item-row';
-
-            // Create the bottom paragraph element
-            var bottomParagraph = document.createElement('p');
-            bottomParagraph.className = 'multibar-item multibar-item-bottom';
-
-            // Create and append spans for C and D in the bottom paragraph
-            var bottomSpanC = document.createElement('span');
-            bottomSpanC.className = 'multibar-item-value';
-            bottomSpanC.id = containerDiv.id + '-bottom-left';
-            bottomSpanC.innerHTML = Value2;
-
-            var bottomSpanD = document.createElement('span');
-            bottomSpanD.className = 'multibar-item-type';
-            bottomSpanD.id = containerDiv.id + '-bottom-right';
-            bottomSpanD.innerHTML = Type2;
-
-            bottomParagraph.appendChild(bottomSpanC);
-            bottomParagraph.appendChild(bottomSpanD);
-
-            // Append the bottom paragraph to the bottom row div
-            bottomRowDiv.appendChild(bottomParagraph);
-
-            // Append the triangle, top row, and bottom row to the main container div
-            containerDiv.appendChild(triangleDiv);
-            containerDiv.appendChild(topRowDiv);
-            containerDiv.appendChild(bottomRowDiv);
-            SIG_Modules.push(IdNum);
-
-            if (append) {
-                document.getElementById("sig-focus-5").insertBefore(containerDiv, document.getElementById('multibar-sig-arrow'));
-                focusTree['sig'][5 - 1].push(focusElement);
-            }
-
-            var scrollElement = document.createElement('div');
-            scrollElement.classList.add('scroll-bar-element');
-            document.getElementById('sig-scroll-bar').appendChild(scrollElement);
-        }
-
-        function createLOGICChannel(labelBottom) {
-            LOGIC_Channels.push(LOGIC_Channels.length + 1);
-
-            // Create main container
-            var rowContainer = document.createElement('div');
-            rowContainer.className = 'grid-logic-row';
-
-            // Create left column
-            var leftColumn = document.createElement('div');
-            leftColumn.className = 'grid-logic-column';
-            leftColumn.style = "border-left: 5px solid var(--color" + ((LOGIC_Channels.length - 1) % 8 + 1) + ");"
-
-            // Create label containers and labels
-            var labelContainerTop = document.createElement('div');
-            labelContainerTop.className = 'grid-logic-label-container';
-            var labelTopElement = document.createElement('p');
-            labelTopElement.className = 'logic-label logic-label-top';
-            labelTopElement.textContent = "CH " + LOGIC_Channels.length;
-            labelContainerTop.appendChild(labelTopElement);
-
-            var labelContainerBottom = document.createElement('div');
-            labelContainerBottom.className = 'grid-logic-label-container';
-            var labelBottomElement = document.createElement('p');
-            labelBottomElement.className = 'logic-label logic-label-bottom';
-            labelBottomElement.innerHTML = labelBottom;
-            labelContainerBottom.appendChild(labelBottomElement);
-
-            // Append label containers to the left column
-            leftColumn.appendChild(labelContainerTop);
-            leftColumn.appendChild(labelContainerBottom);
-
-            // Create right column
-            var rightColumn = document.createElement('div');
-            rightColumn.className = 'grid-logic-column grid-logic-column-wide';
-            rightColumn.id = 'logic-column-' + LOGIC_Channels.length;
-
-            // Create canvas
-            var canvas = document.createElement('canvas');
-            canvas.className = 'logic-canvas';
-            canvas.id = 'logic-canvas-' + LOGIC_Channels.length;
-
-            // Append canvas to the right column
-            rightColumn.appendChild(canvas);
-
-            // Append left and right columns to the main container
-            rowContainer.appendChild(leftColumn);
-            rowContainer.appendChild(rightColumn);
-
-            // Return the generated element
-            document.getElementById('logic-channels').appendChild(rowContainer);
-        }
-
-        function updateLogicChannels(){
-            document.querySelector(':root').style.setProperty('--logic-number', Math.max(5,LOGIC_Channels.length));
-            const canvasList = document.getElementsByClassName('logic-canvas');
-            const columnList = document.getElementsByClassName('grid-logic-column-wide');
-
-            LOGIC_Channels.forEach(Channel => {
-                new p5((sketch)=>{logicP5(sketch, Channel)});
-            });
-        }
-
         /*
-        Update the data shown in the multibar elements, corresponding to the newly entered data in the UI
+            Update the data shown in the multibar elements, corresponding to the newly entered data in the UI
         */
         function updateDataToModule() {
             if (activePage == 'sig') {
@@ -1187,7 +888,9 @@
                 currentFocusedMultibarModule.configuration.dutycycle = parseFloat(document.getElementById('sig-focus-3-2').innerHTML);
                 currentFocusedMultibarModule.configuration.amplitude = parseFloat(document.getElementById('sig-focus-4-1').innerHTML);
                 currentFocusedMultibarModule.configuration.offset = parseFloat(document.getElementById('sig-focus-4-2').innerHTML);
-                currentFocusedMultibarModule.configuration.type = getSigTypeSelection();
+
+                // Find what type of waveform is selected by getting is straight from the UI state
+                currentFocusedMultibarModule.configuration.type = focusTree['sig'][1].reduce((output, item, index) => output || (item.isSelected() ? ['SigSine', 'SigSqr', 'SigRamp'][index] : false), false);
 
                 updateMultibarModule(currentFocusedMultibarModule.id, 
                 '<img class="sig-icon" src="' + currentFocusedMultibarModule.configuration.type + '.png">', 
@@ -1197,6 +900,9 @@
             }           
         }
 
+        /*
+            Function that changes the currently focussed/selected multibar item to one with id 'Updated', and scrolls the window of 4 to keep the selection visible
+        */
         function updateMultibar(Updated, Module, onlyScroll = false){ 
 
             /*
@@ -1477,6 +1183,10 @@
             updateMultibar(1, 'osc');
             updateMultibar(1, 'sig');
         }
+        
+        window.onresize = function() {
+            location.reload();
+        };
     </script>
 </body>
 </html>

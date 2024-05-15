@@ -32,21 +32,21 @@ server.listen(3000, () => {
   console.log('listening on *:3000');
 });
 
-try {
-	function bufferToHex(buffer){
-	let hexString = buffer.map(byte => '0x' + byte.toString(16).padStart(2,'0'));
-	return hexString.join(' ');
-	}
+function bufferToHex(buffer){
+  let hexString = buffer.map(byte => '0x' + byte.toString(16).padStart(2,'0'));
+  return hexString.join(' ');
+}
 
-	function bufferCompare(buffer1, buffer2, length) {
-		for (var i = 0; i < length; i++){
-			if (buffer1[i] != buffer2[i]) {
-				return false;
-			}
+function bufferCompare(buffer1, buffer2, length) {
+	for (var i = 0; i < length; i++){
+		if (buffer1[i] != buffer2[i]) {
+			return false;
 		}
-		return true;
 	}
+	return true;
+}
 
+try {
 	const i2c = require('i2c-bus');
 
 	//const i2cBus = i2c.openSync(11); // Open I2C bus 1
@@ -89,6 +89,6 @@ try {
 			}
 		});
 	},50));
-} catch (error) {
-	console.log("I2C could not be setup, try again.")
+} catch (err) {
+	console.log("Failed to init I2C");
 }
