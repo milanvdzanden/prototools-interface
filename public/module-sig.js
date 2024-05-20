@@ -8,11 +8,11 @@ function createSIGModule(append, Value1, Type1, Value2, Type2, Dutycycle, Offset
         containerDiv.classList.add('focus');
         containerDiv.classList.add('selected');
     }
-    containerDiv.setAttribute('onclick', 'updateMultibar(' + IdNum + ', "sig")');
     containerDiv.style.display = "none";
     //'SigSine', '20.1kHz', '4.00', 'V<sub>pp</sub>'
     var focusElement = new FocusElement(3, containerDiv.id, uuidv4(), false, IdNum == 1, IdNum == 1, {type: Value1, dutycycle: Dutycycle, offset: Offset, frequency: parseFloat(Type1.replace('kHz', '')), amplitude: parseFloat(Value2)});
     containerDiv.setAttribute('uid', focusElement.uid);
+    containerDiv.setAttribute('onclick', 'updateMultibar(getElementMultibarNumber(\'' + focusElement.uid + '\'), "sig")');
 
     // Create the triangle div
     var triangleDiv = document.createElement('div');
@@ -30,12 +30,12 @@ function createSIGModule(append, Value1, Type1, Value2, Type2, Dutycycle, Offset
     // Create and append spans for A and B in the top paragraph
     var topSpanA = document.createElement('span');
     topSpanA.className = 'multibar-item-value';
-    topSpanA.id = containerDiv.id + '-top-left';
+    topSpanA.id = focusElement.uid + '-top-left';
     topSpanA.innerHTML = '<img class="sig-icon" src="' + Value1 + '.png">';
 
     var topSpanB = document.createElement('span');
     topSpanB.className = 'multibar-item-type';
-    topSpanB.id = containerDiv.id + '-top-right';
+    topSpanB.id = focusElement.uid + '-top-right';
     topSpanB.innerHTML = Type1;
 
     topParagraph.appendChild(topSpanA);
@@ -55,12 +55,12 @@ function createSIGModule(append, Value1, Type1, Value2, Type2, Dutycycle, Offset
     // Create and append spans for C and D in the bottom paragraph
     var bottomSpanC = document.createElement('span');
     bottomSpanC.className = 'multibar-item-value';
-    bottomSpanC.id = containerDiv.id + '-bottom-left';
+    bottomSpanC.id = focusElement.uid + '-bottom-left';
     bottomSpanC.innerHTML = Value2;
 
     var bottomSpanD = document.createElement('span');
     bottomSpanD.className = 'multibar-item-type';
-    bottomSpanD.id = containerDiv.id + '-bottom-right';
+    bottomSpanD.id = focusElement.uid + '-bottom-right';
     bottomSpanD.innerHTML = Type2;
 
     bottomParagraph.appendChild(bottomSpanC);

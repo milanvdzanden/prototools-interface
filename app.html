@@ -865,18 +865,18 @@
         /*
             Function to update the text/html of a multibar item, could for example be called when the value is updated with the encoder, and is mirrored to the multibar
         */
-        function updateMultibarModule(id, topleft='NULL', topright='NULL', bottomleft='NULL', bottomright='NULL') {
+        function updateMultibarModule(uid, topleft='NULL', topright='NULL', bottomleft='NULL', bottomright='NULL') {
             if (topleft != 'NULL') {
-                document.getElementById(id + '-top-left').innerHTML = topleft;
+                document.getElementById(uid + '-top-left').innerHTML = topleft;
             }
             if (topright != 'NULL') {
-                document.getElementById(id + '-top-right').innerHTML = topright;
+                document.getElementById(uid + '-top-right').innerHTML = topright;
             }
             if (bottomleft != 'NULL') {
-                document.getElementById(id + '-bottom-left').innerHTML = bottomleft;
+                document.getElementById(uid + '-bottom-left').innerHTML = bottomleft;
             }
             if (bottomright != 'NULL') {
-                document.getElementById(id + '-bottom-right').innerHTML = bottomright;
+                document.getElementById(uid + '-bottom-right').innerHTML = bottomright;
             }
         }
 
@@ -894,7 +894,7 @@
                 // Find what type of waveform is selected by getting is straight from the UI state
                 currentFocusedMultibarModule.configuration.type = focusTree['sig'][1].reduce((output, item, index) => output || (item.isSelected() ? ['SigSine', 'SigSqr', 'SigRamp'][index] : false), false);
 
-                updateMultibarModule(currentFocusedMultibarModule.id, 
+                updateMultibarModule(currentFocusedMultibarModule.uid, 
                 '<img class="sig-icon" src="' + currentFocusedMultibarModule.configuration.type + '.png">', 
                 currentFocusedMultibarModule.configuration.frequency.toFixed(2) + 'kHz', 
                 currentFocusedMultibarModule.configuration.amplitude.toFixed(2),
@@ -1231,12 +1231,8 @@
         }
 
         window.onload = function(){
+
             createDCModule(true, '15.00', 'V', '10.00', 'mA');
-            createDCModule(true, '15.00', 'V', '10.00', 'mA');
-            createDCModule(true, '5.00', 'V', '10.00', 'mA');
-            createDCModule(true, '15.00', 'V', '10.00', 'mA');
-            createDCModule(true, '15.00', 'V', '10.00', 'mA');
-            createDCModule(true, '5.00', 'V', '10.00', 'mA');
 
             createOSCMeasurement(true, 'Phase', '<span style="color: var(--color1)">1</span> → <span style="color: var(--color2)">2</span>', '30', '° (deg)');
             createOSCMeasurement(true, 'V<sub>RMS</sub>', '<span style="color: var(--color1)">1</span>', '20.18', 'mV');
