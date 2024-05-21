@@ -69,7 +69,7 @@ try {
 				if (!bufferCompare(Array.from(new Uint8Array(input)), Array.from(new Uint8Array(prevBuffer)), BUF_SIZE)) {
 					fs.writeSync(0, (Math.round(performance.now()-prevTime)).toString()+'ms ');
 					fs.writeSync(0,bufferToHex(data.buffer)+'\n')			
-					socketClient.emit("userInput", {input});
+					socketClient.emit("module-updates", {input});
 				}
 				prevBuffer = [...input];
 			}

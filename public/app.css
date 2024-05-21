@@ -847,3 +847,13 @@ input[type=number] {
     width: 100%;
     outline: none;
 }
+
+.number-input.focus:not(.selected) {
+    text-decoration: underline 2px;
+    text-underline-offset: 6px;
+    animation: blink 1s infinite;
+}
+.number-input.focus.selected {
+    text-decoration: underline var(--B49) 2px;
+    text-underline-offset: 6px;
+}    

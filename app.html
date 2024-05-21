@@ -17,6 +17,8 @@
     <script src="/socket.io/socket.io.min.js"></script>
     
     <script type="text/javascript" src="/exceptions.js"></script>
+    <script type="text/javascript" src="/socket.js"></script>
+    <script type="text/javascript" src="/interface.js"></script>
 
     <script type="text/javascript" src="/module-sig.js"></script>
     <script type="text/javascript" src="/module-osc.js"></script>
@@ -33,46 +35,46 @@
     <div id="overlay">
         <div class="parent parent-dc parent-active">
             <div class="grid-navbar" id="dc-focus-1">
-                <div class="grid-navbar-item selected focus" id="dc-focus-1-1" onclick="setPage('parent-dc')">
+                <div class="grid-navbar-item selected focus" id="dc-focus-1-1" uid='dbb30aa5-7a21-4767-82d4-0e23c184fb4b' onclick="setPage('parent-dc')">
                     <img src="DC.svg" class="navbar-item-image">
                 </div>
-                <div class="grid-navbar-item" id="dc-focus-1-2" onclick="setPage('parent-osc')">
+                <div class="grid-navbar-item" id="dc-focus-1-2" uid='586e318b-a1f1-4c19-a239-ab6fc861e1c7' onclick="setPage('parent-osc')">
                     <img src="Osc.svg" class="navbar-item-image">
                 </div>
-                <div class="grid-navbar-item" id="dc-focus-1-3" onclick="setPage('parent-sig')">
+                <div class="grid-navbar-item" id="dc-focus-1-3" uid='c4396283-ac11-473c-822d-9fff33de2a87' onclick="setPage('parent-sig')">
                     <img src="Sig.svg" class="navbar-item-image">
                 </div>
-                <div class="grid-navbar-item" id="dc-focus-1-4" onclick="setPage('parent-logic')">
+                <div class="grid-navbar-item" id="dc-focus-1-4" uid='be96124e-02c9-4305-abe8-3538641b039e' onclick="setPage('parent-logic')">
                     <img src="Data.svg" class="navbar-item-image">
                 </div>
-                <div class="grid-navbar-item grid-navbar-item-second-last" id="dc-focus-1-5" onclick="toggleBottomBar()">
+                <div class="grid-navbar-item grid-navbar-item-second-last" id="dc-focus-1-5" uid='8409ab76-f905-4257-932b-b2d12429f636' onclick="toggleBottomBar()">
                     <img src="Fullscreen.svg" style="width: 30px" class="navbar-item-image">
                 </div>
-                <div class="grid-navbar-item grid-navbar-item-last" id="dc-focus-1-6" onclick="setPage('parent-settings')">
+                <div class="grid-navbar-item grid-navbar-item-last" id="dc-focus-1-6" uid='980163ec-ad83-4f6f-8528-2e76a46b1fc6' onclick="setPage('parent-settings')">
                     <img src="Settings.svg" style="width: 30px" class="navbar-item-image">
                 </div>
             </div>
             <div class="grid-dc-row dc-row-1" id="dc-focus-2">
                 <p class="dc-column">
                     <span class="dc-column-type">VOLTAGE</span>
-                    <span class="dc-column-value dc-wide-value" id="dc-focus-2-1"><input class="number-input" uid="e6f0ad7f-98cb-4ffd-a967-73592a9673ba" type="number" lang="en" value="15" step="0.01" min="1" max="20"></span>
+                    <span class="dc-column-value dc-wide-value" id="dc-focus-2-1"><input class="number-input" uid='e6f0ad7f-98cb-4ffd-a967-73592a9673ba' type="number" lang="en" value="15" step="0.01" min="1" max="20"></span>
                     <span class="dc-column-label">V</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-2" id="dc-focus-3">
                 <p class="dc-column">
                     <span class="dc-column-type">CURRENT</span>
-                    <span class="dc-column-value dc-wide-value" uid="122885fc-a732-414c-b7f4-fe7c5ca0fdce"><input class="number-input" uid="12f81bce-fded-4eb8-9352-97ea88fcc59b" type="number" lang="en" value="15" disabled></span>
+                    <span class="dc-column-value dc-wide-value"><input class="number-input" uid='12f81bce-fded-4eb8-9352-97ea88fcc59b' type="number" lang="en" value="15" disabled></span>
                     <span class="dc-column-label">mA</span>
                     <span class="dc-column-type">TARGET</span>
-                    <span class="dc-column-value" id="dc-focus-3-1" uid="bced1558-fa98-4655-8144-daac0347ba42"><input class="number-input" uid="d1fa07ee-2712-461d-ab16-dd984b4f081a" type="number" lang="en" value="1000" step="0.01" min="0" max="2"></span>
+                    <span class="dc-column-value" id="dc-focus-3-1"><input class="number-input" uid='d1fa07ee-2712-461d-ab16-dd984b4f081a' type="number" lang="en" value="1000" step="1" min="0" max="2000"></span>
                     <span class="dc-column-label">mA</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-3" id="dc-focus-4">
                 <p class="dc-column">
                     <span class="dc-column-type">POWER</span>
-                    <span class="dc-column-value dc-wide-value" uid="1cfce083-2247-4be8-9e5a-f6497ae7d271"><input class="number-input" uid="c04bd3c7-e714-4247-b2d9-3b2abe51e059" type="number" lang="en" value="1" disabled></span>
+                    <span class="dc-column-value dc-wide-value"><input class="number-input" uid='c04bd3c7-e714-4247-b2d9-3b2abe51e059' type="number" lang="en" value="1" disabled></span>
                     <span class="dc-column-label">W</span>
                 </p>   
             </div>
@@ -134,8 +136,8 @@
             </div>
             <div class="grid-multibar" id="osc-focus-5">
                 <div class="grid-multibar-arrow" id="multibar-osc-arrow">
-                    <div onclick="updateMultibar(OSC_MeasurementSelected - 1, 'osc')" id="osc-left">◄</div>
-                    <div onclick="updateMultibar(OSC_MeasurementSelected + 1, 'osc')" id="osc-right">►</div>
+                    <div id="osc-left">◄</div>
+                    <div id="osc-right">►</div>
                 </div>
             </div>
             <div class="grid-sidebar">
@@ -186,20 +188,20 @@
             <div class="grid-sig-row sig-row-2" id="sig-focus-3">
                 <p class="sig-column">
                     <span class="sig-column-type">FREQUENCY</span>
-                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-3-1', 'sig', 3, 1)" id="sig-focus-3-1"><input class="number-input" uid="823c3894-892d-430a-ab55-bda993824f3e" type="number" lang="en" value="20.05" step="0.01" min="0" max="1000"></span>
+                    <span class="sig-column-value sig-wide-value" id="sig-focus-3-1"><input class="number-input" uid="823c3894-892d-430a-ab55-bda993824f3e" type="number" lang="en" value="20.05" step="0.01" min="0" max="1000"></span>
                     <span class="sig-column-label">kHz</span>
                     <span class="sig-column-type">DUTY CYCLE</span>
-                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-3-2', 'sig', 3, 2)" id="sig-focus-3-2"><input class="number-input" uid="5db72ec2-aca4-4e0d-a767-ead843472575" type="number" lang="en" value="20" step="0.1" min="0" max="100"></span>
+                    <span class="sig-column-value" id="sig-focus-3-2"><input class="number-input" uid="5db72ec2-aca4-4e0d-a767-ead843472575" type="number" lang="en" value="20" step="0.1" min="0" max="100"></span>
                     <span class="sig-column-label">%</span>
                 </p>   
             </div>
             <div class="grid-sig-row sig-row-3" id="sig-focus-4">
                 <p class="sig-column">
                     <span class="sig-column-type">AMPLITUDE</span>
-                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-4-1', 'sig', 4, 1)" id="sig-focus-4-1"><input class="number-input" uid="d02d85f3-a6d6-4259-a178-53c00aa46648" type="number" lang="en" value="3" step="0.01" min="0" max="10"></span>
+                    <span class="sig-column-value sig-wide-value" id="sig-focus-4-1"><input class="number-input" uid="d02d85f3-a6d6-4259-a178-53c00aa46648" type="number" lang="en" value="3" step="0.01" min="0" max="10"></span>
                     <span class="sig-column-label">V</span>
                     <span class="sig-column-type">OFFSET</span>
-                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-4-2', 'sig', 4, 2)" id="sig-focus-4-2"><input class="number-input" uid="4707b675-b39b-4881-94d6-3ab4b53f2cd6" type="number" lang="en" value="0" step="1" min="0" max="5000"></span>
+                    <span class="sig-column-value" id="sig-focus-4-2"><input class="number-input" uid="4707b675-b39b-4881-94d6-3ab4b53f2cd6" type="number" lang="en" value="0" step="1" min="0" max="5000"></span>
                     <span class="sig-column-label">mV</span>
                 </p>   
             </div>
@@ -284,6 +286,23 @@
         var sideBarVisible = false;
         
         var activePage = 'dc';
+        var activeRow = 1;
+
+        var focusTree = {
+            'dbb30aa5-7a21-4767-82d4-0e23c184fb4b': new FocusElement(FocusElementType.dc_nav_tab, 'dbb30aa5-7a21-4767-82d4-0e23c184fb4b', '586e318b-a1f1-4c19-a239-ab6fc861e1c7', {x: 1, y: 1}),
+            '586e318b-a1f1-4c19-a239-ab6fc861e1c7': new FocusElement(FocusElementType.dc_nav_tab, '586e318b-a1f1-4c19-a239-ab6fc861e1c7', 'c4396283-ac11-473c-822d-9fff33de2a87', {x: 2, y: 1}),
+            'c4396283-ac11-473c-822d-9fff33de2a87': new FocusElement(FocusElementType.dc_nav_tab, 'c4396283-ac11-473c-822d-9fff33de2a87', 'be96124e-02c9-4305-abe8-3538641b039e', {x: 3, y: 1}),
+            'be96124e-02c9-4305-abe8-3538641b039e': new FocusElement(FocusElementType.dc_nav_tab, 'be96124e-02c9-4305-abe8-3538641b039e', '8409ab76-f905-4257-932b-b2d12429f636', {x: 4, y: 1}),
+            '8409ab76-f905-4257-932b-b2d12429f636': new FocusElement(FocusElementType.dc_nav_tab, '8409ab76-f905-4257-932b-b2d12429f636', '980163ec-ad83-4f6f-8528-2e76a46b1fc6', {x: 5, y: 1}),
+            '980163ec-ad83-4f6f-8528-2e76a46b1fc6': new FocusElement(FocusElementType.dc_nav_tab, '980163ec-ad83-4f6f-8528-2e76a46b1fc6', 'dbb30aa5-7a21-4767-82d4-0e23c184fb4b', {x: 6, y: 1}),
+        
+            'e6f0ad7f-98cb-4ffd-a967-73592a9673ba': new FocusElement(FocusElementType.dc_input, 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', {x: 1, y: 2}),
+
+            '12f81bce-fded-4eb8-9352-97ea88fcc59b': new FocusElement(FocusElementType.dc_output, '12f81bce-fded-4eb8-9352-97ea88fcc59b', 'none', {x: 1, y: 3}),
+            'd1fa07ee-2712-461d-ab16-dd984b4f081a': new FocusElement(FocusElementType.dc_input, 'd1fa07ee-2712-461d-ab16-dd984b4f081a', 'd1fa07ee-2712-461d-ab16-dd984b4f081a', {x: 2, y: 3}),
+
+            'c04bd3c7-e714-4247-b2d9-3b2abe51e059': new FocusElement(FocusElementType.dc_output, 'c04bd3c7-e714-4247-b2d9-3b2abe51e059', 'c04bd3c7-e714-4247-b2d9-3b2abe51e059', {x: 1, y: 4}),
+        }
 
         function setPage(className){
             // remove active class from all pages first
@@ -371,34 +390,7 @@
         }
     </script>
     <script>
-        var socket = io();
-        var receivedDataPrev = [0]; // initial value such that the first startup encoder tick does not do unwated scrolling in the UI because of differences
-        var firstTick = true;
-
-        socket.on("userInput", (arg) => {
-            var receivedData = Array.from(new Uint8Array(arg.input));
-            //console.log(receivedData.slice(0, 32).join(' '));
-            
-            // before updating the data, lets compare for the encoder data
-            if (!firstTick) {
-                //hardwareEncoderTick(receivedDataPrev[0], receivedData[0]);
-            }
-            else { // always skip the first tick, since that occurs when the page gets loaded and it move the selection by one.
-                firstTick = false;
-            }
-
-            for (var buttonIndex = 1; buttonIndex < 4; buttonIndex++) {
-                if (receivedData[buttonIndex] != 0) {
-                    console.log("button " + receivedData[buttonIndex]);
-                    //hardwareButtonClick(receivedData[buttonIndex]);
-                }
-            }
-            receivedDataPrev = [...receivedData];
-        });
-
-        function sendUpdate(buffer) {
-            socket.emit('update', buffer);
-        }
+        
 
         document.querySelectorAll('.number-input').forEach(function(element) {
             element.addEventListener('input', function() {
