@@ -77,9 +77,16 @@ function getSigConfiguration(){
     if (document.getElementById('sig-focus-2-1').classList.contains('selected')) output.waveform = 1;
     if (document.getElementById('sig-focus-2-2').classList.contains('selected')) output.waveform = 2;
     if (document.getElementById('sig-focus-2-3').classList.contains('selected')) output.waveform = 3;
-    output.frequency = parseFloat(document.getElementById('sig-focus-3-1').innerHTML);
-    output.dutycycle = parseFloat(document.getElementById('sig-focus-3-2').innerHTML);
-    output.amplitude = parseFloat(document.getElementById('sig-focus-4-1').innerHTML);
-    output.offset = parseFloat(document.getElementById('sig-focus-4-2').innerHTML);
+    output.frequency = parseFloat(document.querySelector('[uid="823c3894-892d-430a-ab55-bda993824f3e"]').value);
+    output.dutycycle = parseFloat(document.querySelector('[uid="5db72ec2-aca4-4e0d-a767-ead843472575"]').value);
+    output.amplitude = parseFloat(document.querySelector('[uid="d02d85f3-a6d6-4259-a178-53c00aa46648"]').value);
+    output.offset = parseFloat(document.querySelector('[uid="4707b675-b39b-4881-94d6-3ab4b53f2cd6"]').value);
     return output;
+}
+
+function sigTypeSelection(id) {
+    document.getElementById('sig-focus-2-1').classList.remove('selected');
+    document.getElementById('sig-focus-2-2').classList.remove('selected');
+    document.getElementById('sig-focus-2-3').classList.remove('selected');
+    document.getElementById(id).classList.add('selected');
 }

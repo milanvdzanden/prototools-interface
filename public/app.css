@@ -457,8 +457,10 @@ div.selected > .multibar-item-triangle {
     vertical-align: middle;
     font-size: 40px;
     line-height: 70px;
-
-    width: 10vw;
+    width: 15vw;
+    display: flex;
+    justify-content: center;
+    align-items:center;
 }
 
 .dc-column-value.dc-wide-value {
@@ -485,7 +487,7 @@ div.selected > .multibar-item-triangle {
     vertical-align: middle;
     font-size: 40px;
 
-    margin-left: 4vw;
+    margin-left: 1vw;
     width: 10vw;
 }
 
@@ -815,4 +817,33 @@ div.selected > .multibar-item-triangle {
 /* INFO */
 img[src="Info.svg"]{
     width: 25px;
+}
+
+input[type=number] {
+    font-weight: 500;
+    color: white;
+    display: inline-block; /* Ensures the spans behave like blocks */
+    vertical-align: middle;
+    font-size: 40px;
+    line-height: 70px;
+    background: transparent;
+    border: 0px transparent;
+    height: 70px !important;
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+    outline: none;
+}
+.dc-wide-value input[type=number] {
+    font-weight: 500;
+    color: white;
+    display: inline-block; /* Ensures the spans behave like blocks */
+    vertical-align: middle;
+    font-size: 65px;
+    line-height: 70px;
+    background: transparent;
+    border: 0px transparent;
+    height: 70px !important;
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+    outline: none;
 }

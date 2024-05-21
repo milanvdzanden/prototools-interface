@@ -1,24 +1,23 @@
 function createDCModule(append, Value1, Type1, Value2, Type2){
-    var IdNum = (DC_Modules.length + 1);
+    var uid = uuidv4();
+
     // Create the main container div
     var containerDiv = document.createElement('div');
     containerDiv.className = 'grid-multibar-item';
-    containerDiv.id = 'dc-focus-5-' + IdNum; //DC_module_
-    if (IdNum == 1) { // first module, so we need to set this focussed
+
+    if (DC_Modules.length == 0) { // first module, so we need to set this focussed
         containerDiv.classList.add('focus');
         containerDiv.classList.add('selected');
     }
 
-    var focusElement = new FocusElement(3, containerDiv.id, uuidv4(), false, IdNum == 1, IdNum == 1);
-    containerDiv.setAttribute('uid', focusElement.uid);
-
-    containerDiv.setAttribute('onclick', 'updateMultibar(getElementMultibarNumber(\'' + focusElement.uid + '\'), "dc")');
-    containerDiv.style.display = "none";
+    containerDiv.setAttribute('uid', uid);
+    containerDiv.setAttribute('onclick', 'console.log("' + uid + '")');
+    containerDiv.style.display = 'none';
 
     // Create the triangle div
     var triangleDiv = document.createElement('div');
     triangleDiv.className = 'multibar-item-triangle';
-    triangleDiv.style.borderColor = 'var(--color' + IdNum + ') transparent transparent transparent';
+    triangleDiv.style.borderColor = `var(--color${DC_Modules.length + 1}) transparent transparent transparent`;
 
     // Create the top row div
     var topRowDiv = document.createElement('div');
@@ -31,12 +30,12 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
     // Create and append spans for A and B in the top paragraph
     var topSpanA = document.createElement('span');
     topSpanA.className = 'multibar-item-value';
-    topSpanA.id = 'DC_Value_Top_' + IdNum;
+    topSpanA.id = 'DC_Value_Top_' + uid;
     topSpanA.innerHTML = Value1;
 
     var topSpanB = document.createElement('span');
     topSpanB.className = 'multibar-item-type';
-    topSpanB.id = 'DC_Type_Top_' + IdNum;
+    topSpanB.id = 'DC_Type_Top_' + uid;
     topSpanB.innerHTML = Type1;
 
     topParagraph.appendChild(topSpanA);
@@ -56,12 +55,12 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
     // Create and append spans for C and D in the bottom paragraph
     var bottomSpanC = document.createElement('span');
     bottomSpanC.className = 'multibar-item-value';
-    bottomSpanC.id = 'DC_Value_Bottom_' + IdNum;
+    bottomSpanC.id = 'DC_Value_Bottom_' + uid;
     bottomSpanC.innerHTML = Value2;
 
     var bottomSpanD = document.createElement('span');
     bottomSpanD.className = 'multibar-item-type';
-    bottomSpanD.id = 'DC_Type_Bottom_' + IdNum;
+    bottomSpanD.id = 'DC_Type_Bottom_' + uid;
     bottomSpanD.innerHTML = Type2;
 
     bottomParagraph.appendChild(bottomSpanC);
@@ -75,11 +74,10 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
     containerDiv.appendChild(topRowDiv);
     containerDiv.appendChild(bottomRowDiv);
 
-    DC_Modules.push(IdNum);
+    DC_Modules.push(uid);
 
     if (append) {
         document.getElementById("dc-focus-5").insertBefore(containerDiv, document.getElementById('multibar-dc-arrow'));
-        focusTree['dc'][5 - 1].push(focusElement);
     }
 
     var scrollElement = document.createElement('div');

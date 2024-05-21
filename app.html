@@ -55,31 +55,31 @@
             <div class="grid-dc-row dc-row-1" id="dc-focus-2">
                 <p class="dc-column">
                     <span class="dc-column-type">VOLTAGE</span>
-                    <span class="dc-column-value dc-wide-value" id="dc-focus-2-1">15.00</span>
+                    <span class="dc-column-value dc-wide-value" id="dc-focus-2-1"><input class="number-input" uid="e6f0ad7f-98cb-4ffd-a967-73592a9673ba" type="number" lang="en" value="15" step="0.01" min="1" max="20"></span>
                     <span class="dc-column-label">V</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-2" id="dc-focus-3">
                 <p class="dc-column">
                     <span class="dc-column-type">CURRENT</span>
-                    <span class="dc-column-value dc-wide-value">2.0</span>
+                    <span class="dc-column-value dc-wide-value" uid="122885fc-a732-414c-b7f4-fe7c5ca0fdce"><input class="number-input" uid="12f81bce-fded-4eb8-9352-97ea88fcc59b" type="number" lang="en" value="15" disabled></span>
                     <span class="dc-column-label">mA</span>
-                    <span class="dc-column-type">LIMIT</span>
-                    <span class="dc-column-value" id="dc-focus-3-1">0.05</span>
-                    <span class="dc-column-label">A</span>
+                    <span class="dc-column-type">TARGET</span>
+                    <span class="dc-column-value" id="dc-focus-3-1" uid="bced1558-fa98-4655-8144-daac0347ba42"><input class="number-input" uid="d1fa07ee-2712-461d-ab16-dd984b4f081a" type="number" lang="en" value="1000" step="0.01" min="0" max="2"></span>
+                    <span class="dc-column-label">mA</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-3" id="dc-focus-4">
                 <p class="dc-column">
                     <span class="dc-column-type">POWER</span>
-                    <span class="dc-column-value dc-wide-value">1</span>
+                    <span class="dc-column-value dc-wide-value" uid="1cfce083-2247-4be8-9e5a-f6497ae7d271"><input class="number-input" uid="c04bd3c7-e714-4247-b2d9-3b2abe51e059" type="number" lang="en" value="1" disabled></span>
                     <span class="dc-column-label">W</span>
                 </p>   
             </div>
             <div class="grid-multibar" id="dc-focus-5">
                 <div class="grid-multibar-arrow" id="multibar-dc-arrow">
-                    <div onclick="updateMultibar(DC_ModuleSelected - 1, 'dc')" id="dc-left">◄</div>
-                    <div onclick="updateMultibar(DC_ModuleSelected + 1, 'dc')" id="dc-right">►</div>
+                    <div id="dc-left">◄</div>
+                    <div id="dc-right">►</div>
                 </div>
             </div>
             <div class="grid-sidebar">
@@ -173,9 +173,9 @@
             <div class="grid-sig-row sig-row-1" id="sig-focus-2">
                 <p class="sig-column">
                     <span class="sig-column-type">WAVEFORM</span>
-                    <span class="sig-column-image first selected" id="sig-focus-2-1" onclick="setSelected('sig-focus-2-1', 'sig', 2, 1)"><img class="sig-icon" src="SigSine.png"></span>
-                    <span class="sig-column-image" id="sig-focus-2-2" onclick="setSelected('sig-focus-2-2', 'sig', 2, 2)"><img class="sig-icon" src="SigSqr.png"></span>
-                    <span class="sig-column-image" id="sig-focus-2-3" onclick="setSelected('sig-focus-2-3', 'sig', 2, 3)"><img class="sig-icon" src="SigRamp.png"></span>
+                    <span class="sig-column-image first selected" id="sig-focus-2-1" onclick="sigTypeSelection('sig-focus-2-1')"><img class="sig-icon" src="SigSine.png"></span>
+                    <span class="sig-column-image" id="sig-focus-2-2" onclick="sigTypeSelection('sig-focus-2-2')"><img class="sig-icon" src="SigSqr.png"></span>
+                    <span class="sig-column-image" id="sig-focus-2-3" onclick="sigTypeSelection('sig-focus-2-3')"><img class="sig-icon" src="SigRamp.png"></span>
                 </p> 
                 <div class="sig-viewport-wrapper" >
                     <canvas id="sig-viewport" width="0" height="0" style="width: 0px; height: 0px;">
@@ -186,27 +186,27 @@
             <div class="grid-sig-row sig-row-2" id="sig-focus-3">
                 <p class="sig-column">
                     <span class="sig-column-type">FREQUENCY</span>
-                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-3-1', 'sig', 3, 1)" id="sig-focus-3-1">20.50</span>
+                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-3-1', 'sig', 3, 1)" id="sig-focus-3-1"><input class="number-input" uid="823c3894-892d-430a-ab55-bda993824f3e" type="number" lang="en" value="20.05" step="0.01" min="0" max="1000"></span>
                     <span class="sig-column-label">kHz</span>
                     <span class="sig-column-type">DUTY CYCLE</span>
-                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-3-2', 'sig', 3, 2)" id="sig-focus-3-2">30.0</span>
+                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-3-2', 'sig', 3, 2)" id="sig-focus-3-2"><input class="number-input" uid="5db72ec2-aca4-4e0d-a767-ead843472575" type="number" lang="en" value="20" step="0.1" min="0" max="100"></span>
                     <span class="sig-column-label">%</span>
                 </p>   
             </div>
             <div class="grid-sig-row sig-row-3" id="sig-focus-4">
                 <p class="sig-column">
                     <span class="sig-column-type">AMPLITUDE</span>
-                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-4-1', 'sig', 4, 1)" id="sig-focus-4-1">2.0</span>
+                    <span class="sig-column-value sig-wide-value" onclick="toggleSelected('sig-focus-4-1', 'sig', 4, 1)" id="sig-focus-4-1"><input class="number-input" uid="d02d85f3-a6d6-4259-a178-53c00aa46648" type="number" lang="en" value="3" step="0.01" min="0" max="10"></span>
                     <span class="sig-column-label">V</span>
                     <span class="sig-column-type">OFFSET</span>
-                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-4-2', 'sig', 4, 2)" id="sig-focus-4-2">30</span>
+                    <span class="sig-column-value" onclick="toggleSelected('sig-focus-4-2', 'sig', 4, 2)" id="sig-focus-4-2"><input class="number-input" uid="4707b675-b39b-4881-94d6-3ab4b53f2cd6" type="number" lang="en" value="0" step="1" min="0" max="5000"></span>
                     <span class="sig-column-label">mV</span>
                 </p>   
             </div>
             <div class="grid-multibar" id="sig-focus-5">
                 <div class="grid-multibar-arrow" id="multibar-sig-arrow">
-                    <div onclick="updateMultibar(SIG_ModuleSelected - 1, 'sig')" id="sig-left">◄</div>
-                    <div onclick="updateMultibar(SIG_ModuleSelected + 1, 'sig')" id="sig-right">►</div>
+                    <div id="sig-left">◄</div>
+                    <div id="sig-right">►</div>
                 </div>
             </div>
             <div class="grid-sidebar">
@@ -279,19 +279,21 @@
         var oscLoaded = false;
         var sigLoaded = false;
         var logicLoaded = true;
+
         var bottomBarVisible = true;
         var sideBarVisible = false;
         
         var activePage = 'dc';
-        var activeFocusRow = 1;
-        var numberOfPages = 6;
 
         function setPage(className){
+            // remove active class from all pages first
             for (let parent of document.getElementsByClassName("parent")) {
                parent.classList.remove("parent-active");
             }
+            // add active class to new active page
             document.getElementsByClassName(className)[0].classList.add("parent-active");
             activePage = className.replace('parent-', '');
+
             if (className == 'parent-osc' && !oscLoaded) {
                 new p5(oscP5_1);
                 new p5(oscP5_2);
@@ -300,34 +302,6 @@
             if (activePage == 'sig' && !sigLoaded) {
                 new p5(sigP5);
                 sigLoaded = true;
-
-                var focusedMultibarModule = focusTree[activePage][5 - 1][getSelectedIndexSpecificRow(5)];
-                document.getElementById('sig-focus-3-1').innerHTML = focusedMultibarModule.configuration.frequency;
-                document.getElementById('sig-focus-3-2').innerHTML = focusedMultibarModule.configuration.dutycycle;
-                document.getElementById('sig-focus-4-1').innerHTML = focusedMultibarModule.configuration.amplitude;
-                document.getElementById('sig-focus-4-2').innerHTML = focusedMultibarModule.configuration.offset;
-                
-                setSelected('sig-focus-2-1', 'sig', 2, 1, (focusedMultibarModule.configuration.type != 'SigSine'));
-                setSelected('sig-focus-2-2', 'sig', 2, 2, (focusedMultibarModule.configuration.type != 'SigSqr'));
-                setSelected('sig-focus-2-3', 'sig', 2, 3, (focusedMultibarModule.configuration.type != 'SigRamp'));
-            }
-
-            
-            for (const element of focusTree[activePage][5 - 1]) { // update the multibar of the new page in case the window was left far away from the current selection
-                if (element.isSelected()) {
-                    element.setFocus(true);
-                    updateMultibar(element.getFocusAndSubfocusNumber()[1], activePage, true);
-                    break;
-                }
-            }
-
-            for (const element of focusTree[activePage][1 - 1]) { // update the navbar to the new tab
-                if (element.defaultFocus) {
-                    element.setFocus(true);
-                }
-                else {
-                    element.setFocus(false);
-                }
             }
         }
 
@@ -380,592 +354,13 @@
     </script>
     <script>
         DC_Modules = [];
-        DC_ModuleSelected = 0;
-        DC_MultibarWindow = [1,2,3,4];
 
         OSC_Measurements = [];
-        OSC_MeasurementSelected = 0;
-        OSC_MultibarWindow = [1,2,3,4];
 
         SIG_Modules = [];
-        SIG_ModuleSelected = 0;
-        SIG_MultibarWindow = [1,2,3,4];
 
         LOGIC_Channels = [];
-
-        var pages = ['dc', 'osc', 'sig', 'logic', 'settings'];
-
-        const FocusElementType = {
-            NavElement: 0,
-            NumberInput: 1,
-            ToggleInput: 2,
-            MultibarModule: 3
-        }
-
-        class FocusElement {
-            constructor(type, id, uid, selected = false, focus = false, defaultFocus = false, configuration = {}) {
-                this.type = type;
-                this.selected = selected;
-                this.focus = focus;
-                this.defaultFocus = defaultFocus;
-                this.configuration = configuration;
-                this.id = id;
-                this.uid = uid;
-            }
-
-            // Getter for selected
-            isSelected() {
-                return this.selected;
-            }
-
-            // Setter for selected
-            setSelected(value) {
-                this.selected = value;
-                value ? document.getElementById(this.id).classList.add('selected') : document.getElementById(this.id).classList.remove('selected');
-            }
-
-            // Setter for selected
-            applyDefault() {
-                this.focus = this.defaultFocus;
-            }
-
-            // Getter for focus
-            isFocused() {
-                return this.focus;
-            }
-
-            // Setter for focus
-            setFocus(value) {
-                this.focus = value;
-                value ? document.getElementById(this.id).classList.add('focus') : document.getElementById(this.id).classList.remove('focus');
-            }
-
-            getFocusAndSubfocusNumber() {
-                const regex = /(\d+)-(\d+)/;
-                const match = this.id.match(regex);
-                if (match) {
-                    var output = [];
-                    output[0] = parseInt(match[1]);
-                    output[1] = parseInt(match[2]);
-                    return output;
-                }
-                else {
-                    return false;
-                }
-            }
-        }
-
-        focusTree = {
-            'dc': [
-                [new FocusElement(0, 'dc-focus-1-1', uuidv4(), true, true, true), new FocusElement(0, 'dc-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-4', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-5', uuidv4(), false, false), new FocusElement(0, 'dc-focus-1-6', uuidv4(), false, false)],
-                [new FocusElement(1, 'dc-focus-2-1', uuidv4(), true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.5, max: 20})],
-                [new FocusElement(1, 'dc-focus-3-1', uuidv4(), true, false, true, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0.1, max: 2})],
-                [],
-                [],
-                []
-            ],
-            'osc': [
-                [new FocusElement(0, 'osc-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-2', uuidv4(), true, true, true), new FocusElement(0, 'osc-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-4', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-5', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-6', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-7', uuidv4(), false, false), new FocusElement(0, 'osc-focus-1-8', uuidv4(), false, false)],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            'sig': [
-                [new FocusElement(0, 'sig-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-3', uuidv4(), true, true, true), new FocusElement(0, 'sig-focus-1-4', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-5', uuidv4(), false, false), new FocusElement(0, 'sig-focus-1-6', uuidv4(), false, false)],
-                [new FocusElement(2, 'sig-focus-2-1', uuidv4(), true, false, true), new FocusElement(2, 'sig-focus-2-2', uuidv4(), false, false, false), new FocusElement(2, 'sig-focus-2-3', uuidv4(), false, false, false)],
-                [new FocusElement(1, 'sig-focus-3-1', uuidv4(), false, false, true, {smallStep: 0.01, bigStep: 1, decimals: 2, min: 0, max: 1000}), new FocusElement(1, 'sig-focus-3-2', uuidv4(), false, false, false, {smallStep: 0.1, bigStep: 1, decimals: 1, min: 0, max: 100})],
-                [new FocusElement(1, 'sig-focus-4-1', uuidv4(), false, false, true, {smallStep: 0.01, bigStep: 0.1, decimals: 2, min: 0, max: 5}), new FocusElement(1, 'sig-focus-4-2', uuidv4(), false, false, false, {smallStep: 10, bigStep: 100, decimals: 0, min: -5000, max: 5000})],
-                [],
-                []
-            ],
-            'logic': [
-                [new FocusElement(0, 'logic-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'logic-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'logic-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'logic-focus-1-4', uuidv4(), true, true, true), new FocusElement(0, 'logic-focus-1-5', uuidv4(), false, false)],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            'settings': [
-                [new FocusElement(0, 'settings-focus-1-1', uuidv4(), false, false), new FocusElement(0, 'settings-focus-1-2', uuidv4(), false, false), new FocusElement(0, 'settings-focus-1-3', uuidv4(), false, false), new FocusElement(0, 'settings-focus-1-4', uuidv4(), false, false, false), new FocusElement(0, 'settings-focus-1-5', uuidv4(), true, true, true)],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        }
-
-        function setSelected(id, page, focus, subfocus, remove = false){
-            remove ? document.getElementById(id).classList.remove('selected') : document.getElementById(id).classList.add('selected');
-            focusTree[page][focus - 1][subfocus - 1].setSelected(!remove);
-        }
         
-        function toggleSelected(id, page, focus, subfocus){
-            document.getElementById(id).classList.toggle('selected');
-            if (focusTree[page][focus - 1][subfocus - 1].isSelected()) {
-                focusTree[page][focus - 1][subfocus - 1].setSelected(false);
-            }
-            else {
-                focusTree[page][focus - 1][subfocus - 1].setSelected(true);
-            }
-        }
-
-        function getFocusElement(){
-            var focusIndex = 0;
-            for (const element of focusTree[activePage][activeFocusRow - 1]) {
-                if (element.isFocused()) {
-                    return element;
-                }
-                focusIndex++;
-            };
-            return false;
-        }
-
-        function clipNumber(number, min_value, max_value) {
-            return Math.min(Math.max(number, min_value), max_value);
-        }
-
-        /*
-            No arguments is just clicking (= 0), direction < 0 means lower the value, direction > 0 means increase
-        */
-        function interactFocusElement(direction = 0) {
-            var currentFocusElement = getFocusElement();
-            var currentFocusElementDOM = document.getElementById(currentFocusElement.id);
-            var currentFocusElementValue = parseFloat(currentFocusElementDOM.innerHTML);
-
-            if (currentFocusElement.type == FocusElementType.NavElement || currentFocusElement.type == FocusElementType.ToggleInput) { // just clicking
-                /* Special cases here */
-                if (currentFocusElement.id.includes('sig') && currentFocusElement.type == FocusElementType.ToggleInput) { // only one can be selected at any one time
-                    for (const element of focusTree[activePage][activeFocusRow - 1]) {
-                        element.setSelected(false);
-                    };
-                }
-
-                currentFocusElementDOM.click();
-            }
-            else {
-                if (direction != 0) {
-                    if (encoderButtonDown) {
-                        currentFocusElementDOM.innerHTML = clipNumber(parseFloat(currentFocusElementValue + direction * currentFocusElement.configuration.smallStep), currentFocusElement.configuration.min, currentFocusElement.configuration.max).toFixed(currentFocusElement.configuration.decimals);
-                    }
-                    else {
-                        currentFocusElementDOM.innerHTML = clipNumber(parseFloat(currentFocusElementValue + direction * currentFocusElement.configuration.bigStep), currentFocusElement.configuration.min, currentFocusElement.configuration.max).toFixed(currentFocusElement.configuration.decimals);
-                    }
-                }
-                else {
-                    currentFocusElementDOM.click();
-                }
-            }
-        }
-
-        /*
-            Get the index of the current element in "focusTree" that has focus
-        */
-        function getFocusIndex(){
-            var focusIndex = 0;
-            for (const element of focusTree[activePage][activeFocusRow - 1]) {
-                if (element.isFocused()) {
-                    return focusIndex;
-                }
-                focusIndex++;
-            };
-            return false;
-        }
-
-        /*
-            Get the index of the current element in "focusTree" that is selected
-        */        
-        function getSelectedIndex(){
-            var selectedIndex = 0;
-            for (const element of focusTree[activePage][activeFocusRow - 1]) {
-                if (element.isSelected()) {
-                    return selectedIndex;
-                }
-                selectedIndex++;
-            };
-            return false;
-        }
-        
-        /*
-            Get the index of the current element in "focusTree" in the given row that is currently selected
-        */
-        function getSelectedIndexSpecificRow(row){
-            var selectedIndex = 0;
-            for (const element of focusTree[activePage][row - 1]) {
-                if (element.isSelected()) {
-                    return selectedIndex;
-                }
-                selectedIndex++;
-            };
-            return false;
-        }
-
-        /*
-            Change the element that has focus within the currently selected row, on the active page
-        */
-        function changeFocus(subFocusIndex) {
-            if (!(subFocusIndex < 0 || subFocusIndex >= focusTree[activePage][activeFocusRow - 1].length)) {
-                (focusTree[activePage][activeFocusRow - 1]).forEach(element => {
-                    element.setFocus(false);
-                });
-                focusTree[activePage][activeFocusRow - 1][subFocusIndex].setFocus(true);
-
-                /* special cases */
-                if (activeFocusRow == 5) {
-                    updateMultibar(subFocusIndex + 1, activePage, true);
-                }
-            }
-        }
-
-        /*
-            Change the row that is currently focussed i.e. the row you can modify with the encoder input. newRow starts at 1
-        */
-        function changeFocusRow(newRow) {
-            if (newRow != activeFocusRow) {
-                /*
-                reset all selected to current focussed
-                */
-                for (const element of focusTree[activePage][activeFocusRow - 1]) {
-                    /* special cases here */
-                    
-                    if (element.id.includes('sig') && element.type != FocusElementType.ToggleInput) { // state of sig toggle input has to remain
-                        if (element.type != FocusElementType.MultibarModule) {
-                            element.setSelected(false);
-                        }
-                    }
-                    element.setFocus(false);
-                    if (element.defaultFocus && element.type == FocusElementType.NavElement) {
-                        element.setSelected(true);
-                    }
-                }
-
-                activeFocusRow = newRow;
-
-                /*
-                set focus to default element
-                */
-                if (activeFocusRow == 5) { // in the case of a multibar, set the focus to the currently selected element
-                    for (const element of focusTree[activePage][activeFocusRow - 1]) {
-                        if (element.isSelected()) {
-                            element.setFocus(true);
-                            updateMultibar(element.getFocusAndSubfocusNumber()[1], activePage, true);
-                            break;
-                        }
-                    }
-                }
-                else {
-                    for (const element of focusTree[activePage][activeFocusRow - 1]) {
-                        if (element.defaultFocus) {
-                            element.setFocus(true);
-                            break;
-                        }
-                    }
-                }
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-
-        /*
-            Function that processes the encoder rotations, and moves the focus to the correct element
-        */
-        function hardwareEncoderTick(previousEncoderPosition, newEncoderPosition) {
-            var differenceEncoderPosition = (newEncoderPosition - previousEncoderPosition);
-            if (differenceEncoderPosition == 255) differenceEncoderPosition = -1;
-            if (differenceEncoderPosition == 254) differenceEncoderPosition = -2;
-            if (differenceEncoderPosition == 253) differenceEncoderPosition = -3;
-            if (differenceEncoderPosition == 252) differenceEncoderPosition = -4;
-            if (differenceEncoderPosition == -255) differenceEncoderPosition = 1;
-            if (differenceEncoderPosition == -254) differenceEncoderPosition = 2;
-            if (differenceEncoderPosition == -253) differenceEncoderPosition = 3;
-            if (differenceEncoderPosition == -252) differenceEncoderPosition = 4;
-
-            if (differenceEncoderPosition != 0) { // left rotation
-                if (activePage == 'dc') {
-                    switch (activeFocusRow) {
-                        case 1: // navbar
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 2:
-                            interactFocusElement(differenceEncoderPosition);
-                            break;
-                        case 3:
-                            interactFocusElement(differenceEncoderPosition);
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            console.log(getFocusIndex(), getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition))
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 6:
-                            break;
-                    }
-                }
-                else if (activePage == 'osc') {
-                    switch (activeFocusRow) {
-                        case 1: // navbar
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 6:
-                            break;
-                    }
-                }
-                else if (activePage == 'sig') {
-                    switch (activeFocusRow) {
-                        case 1: // navbar
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 2: // waveform selection
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 3: // frequency and duty cycle
-                            var foundSelectedInput = false;
-                            var selectedInput;
-                            for (const input of focusTree[activePage][activeFocusRow - 1]) {
-                                if (input.isSelected()) {
-                                    foundSelectedInput = true;
-                                    selectedInput = input;
-                                }
-                            }
-                            if (foundSelectedInput) {
-                                interactFocusElement(differenceEncoderPosition);
-                                updateDataToModule();
-                            }
-                            else {
-                                changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            }
-                            break;
-                        case 4: // amplitude and offset
-                            var foundSelectedInput = false;
-                            var selectedInput;
-                            for (const input of focusTree[activePage][activeFocusRow - 1]) {
-                                if (input.isSelected()) {
-                                    foundSelectedInput = true;
-                                    selectedInput = input;
-                                }
-                            }
-                            if (foundSelectedInput) {
-                                interactFocusElement(differenceEncoderPosition);
-                                updateDataToModule();
-                            }
-                            else {
-                                changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            }
-                            break;
-                        case 5: // multibar
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 6:
-                            break;
-                    }
-                }
-                else if (activePage == 'logic') {
-                    switch (activeFocusRow) {
-                        case 1: // navbar
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
-                            break;
-                    }
-                }
-                else if (activePage == 'settings') {
-                    switch (activeFocusRow) {
-                        case 1: // navbar
-                            changeFocus(getFocusIndex() + (differenceEncoderPosition)/Math.abs(differenceEncoderPosition));
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
-                            break;
-                    }
-                }
-            }
-        }
-
-        var encoderButtonDown = false;
-
-        /*
-            Function that processes the button inputs as well as the encoder built-in switch
-        */
-        function hardwareButtonClick(buttonNumber) {
-            switch (buttonNumber) {
-                case 1: // BTN 1
-                    toggleSideBar();
-                    break;
-                case 2: // BTN 2
-                    changeFocusRow(5);
-                    break;
-                case 3: // BTN 3
-                    if (!changeFocusRow(4)){ // returns false if it didnt change rows
-                        if (activePage == 'sig') {
-                            if (getFocusIndex() + 1 < focusTree[activePage][activeFocusRow - 1].length) {
-                                changeFocus(getFocusIndex() + 1);
-                            } else {
-                                changeFocus(getFocusIndex() - 1);
-                            }
-                        }
-                    }
-                    break;
-                case 4: // BTN 4
-                    if (!changeFocusRow(3)){ // returns false if it didnt change rows
-                        if (activePage == 'sig') {
-                            if (getFocusIndex() + 1 < focusTree[activePage][activeFocusRow - 1].length) {
-                                changeFocus(getFocusIndex() + 1);
-                            } else {
-                                changeFocus(getFocusIndex() - 1);
-                            }
-                        }
-                    }
-                    break;
-                case 5: // BTN 5
-                    changeFocusRow(2);
-                    break;
-                case 6: // BTN 6
-                    changeFocusRow(1);
-                    break;
-                case 7: // BTN ENCODER SW RELEASED
-                    interactFocusElement();
-                    encoderButtonDown = false;
-                    // find active selected element
-                    break;
-                case 8: // BTN ENCODER SW PRESSED DOWN
-                    encoderButtonDown = true;
-            }
-        }
-
-        /*
-            Function to update the text/html of a multibar item, could for example be called when the value is updated with the encoder, and is mirrored to the multibar
-        */
-        function updateMultibarModule(uid, topleft='NULL', topright='NULL', bottomleft='NULL', bottomright='NULL') {
-            if (topleft != 'NULL') {
-                document.getElementById(uid + '-top-left').innerHTML = topleft;
-            }
-            if (topright != 'NULL') {
-                document.getElementById(uid + '-top-right').innerHTML = topright;
-            }
-            if (bottomleft != 'NULL') {
-                document.getElementById(uid + '-bottom-left').innerHTML = bottomleft;
-            }
-            if (bottomright != 'NULL') {
-                document.getElementById(uid + '-bottom-right').innerHTML = bottomright;
-            }
-        }
-
-        /*
-            Update the data shown in the multibar elements, corresponding to the newly entered data in the UI
-        */
-        function updateDataToModule() {
-            if (activePage == 'sig') {
-                var currentFocusedMultibarModule = focusTree[activePage][5 - 1][getSelectedIndexSpecificRow(5)];
-                currentFocusedMultibarModule.configuration.frequency = parseFloat(document.getElementById('sig-focus-3-1').innerHTML);
-                currentFocusedMultibarModule.configuration.dutycycle = parseFloat(document.getElementById('sig-focus-3-2').innerHTML);
-                currentFocusedMultibarModule.configuration.amplitude = parseFloat(document.getElementById('sig-focus-4-1').innerHTML);
-                currentFocusedMultibarModule.configuration.offset = parseFloat(document.getElementById('sig-focus-4-2').innerHTML);
-
-                // Find what type of waveform is selected by getting is straight from the UI state
-                currentFocusedMultibarModule.configuration.type = focusTree['sig'][1].reduce((output, item, index) => output || (item.isSelected() ? ['SigSine', 'SigSqr', 'SigRamp'][index] : false), false);
-
-                updateMultibarModule(currentFocusedMultibarModule.uid, 
-                '<img class="sig-icon" src="' + currentFocusedMultibarModule.configuration.type + '.png">', 
-                currentFocusedMultibarModule.configuration.frequency.toFixed(2) + 'kHz', 
-                currentFocusedMultibarModule.configuration.amplitude.toFixed(2),
-                'V<sub>pp</sub>');
-            }           
-        }
-
-        /*
-            When inputting for example: dc-focus-etc it will return dc (the prefix)
-        */
-        function getPrefix(className) {
-            const match = className.match(/^[^-]+/);
-            return match ? match[0] : null;
-        }
-
-        /*
-            Remove Module with a specific Uid and update all other UI elements as well to reflect that
-        */
-        function removeElementByUid(Uid) {
-            const elements = document.querySelectorAll('[uid="' + Uid + '"]');
-
-            var prefix = getPrefix(elements[0].id);
-            var parent = document.getElementById(prefix + '-focus-5');
-            var newFocusIndex = 1;
-            var oldElementNumberInDCModules;
-
-            var ModuleSelectedId = document.getElementById(focusTree[prefix][4][DC_ModuleSelected - 1].id).getAttribute('uid');
-
-            parent.children.forEach(child => {
-                if (child.getAttribute('uid') == Uid) {
-                    oldElementIndexInDCModules = newFocusIndex - 1;
-                }
-            });
-            elements[0].parentNode.removeChild(elements[0]);
-            focusTree[prefix][4] = focusTree[prefix][4].filter(item => item.uid != Uid);
-            parent.children.forEach(child => {
-                if (child.getAttribute('uid')) {
-                    child.id = prefix + '-focus-5-' + newFocusIndex.toString();
-                    focusTree[prefix][4][newFocusIndex - 1].id = prefix + '-focus-5-' + newFocusIndex.toString();
-                }
-                newFocusIndex++;
-            });
-            DC_Modules.pop();
-            document.getElementById('dc-scroll-bar').removeChild(document.getElementById('dc-scroll-bar').children[0]);
-            
-            try {
-                DC_ModuleSelected = getElementMultibarNumber(ModuleSelectedId);
-            } catch (e) {}
-            updateMultibar(DC_ModuleSelected, prefix);
-        }
-
-        /*
-            Returns the number / rank / index of the element with the specific given Uid
-        */
-        function getElementMultibarNumber(Uid) {
-            const elements = document.querySelectorAll('[uid="' + Uid + '"]');
-            var prefix = getPrefix(elements[0].id);
-            var parent = document.getElementById(prefix + '-focus-5');
-            var output = -1;
-
-            var currentCounter = 1;
-            parent.children.forEach(child => {
-                if (child.getAttribute('uid') == Uid) {
-                    output = currentCounter;
-                }
-                currentCounter++;
-            });
-
-            return output;
-        }
-
         /*
             Generates a random uuid
         */
@@ -973,231 +368,6 @@
             return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
               (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
             );
-        }
-
-        /*
-            Function that changes the currently focussed/selected multibar item to one with id 'Updated', and scrolls the window of 4 to keep the selection visible
-        */
-        function updateMultibar(Updated, Module, onlyScroll = false){ 
-
-            /*
-                if (onlyScroll)
-                    step 1: reset all modules to NOT focused
-                    step 2: move FOCUS to another module, dont modify selected
-                if (!onlyScroll)
-                    step 1: reset all modules to NOT focused and NOT selected
-                    step 2: move FOCUS and selection to the designated module
-                if (DC not inside window)
-                    move the window
-                    update the visibilities
-            */
-            updateDataToModule();
-
-            switch (Module) {
-                case 'dc':
-                    if (!DC_Modules.includes(Updated))
-                    {
-                        return false;
-                    }
-
-                    // Make all current in window invisible
-                    for (var j = 0; j < DC_MultibarWindow.length; j++) {
-                        if (DC_Modules.includes(DC_MultibarWindow[j])) document.getElementById("dc-focus-5-" + DC_MultibarWindow[j]).style.display = "none";
-                    }
-                    // update window according to the new selection
-                    if (!DC_MultibarWindow.includes(Updated)) {      
-                        if(Math.max(...DC_MultibarWindow) < Updated) { // on the right of the current window
-                            var delta = Updated - Math.max(...DC_MultibarWindow);
-                            for (var i = 0; i < DC_MultibarWindow.length; i++) {
-                                DC_MultibarWindow[i] += delta;
-                            }
-                        }
-                        else {
-                            var delta = Math.min(...DC_MultibarWindow) - Updated;
-                            for (var i = 0; i < DC_MultibarWindow.length; i++) {
-                                DC_MultibarWindow[i] -= delta;
-                            }
-                        }
-                    }
-                    if (DC_Modules.length <= 4) {
-                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-left', 0);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-mid', DC_Modules.length);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-right', 0);
-                    }
-                    else {
-                        var left = Math.min(...DC_MultibarWindow);
-                        var right = Math.max(...DC_MultibarWindow);
-                        var index = 0;
-                        document.getElementById('dc-scroll-bar').children.forEach(child => {
-                            if ((index < left || index > left)) {
-                                child.style.opacity = "0.3";
-                                if (index == 0 || index == document.getElementById('dc-scroll-bar').children.length - 1) {
-                                    child.style.opacity = "0";
-                                }
-                            }
-                            else {
-                                child.style.opacity = "1";
-                            }
-                            index++;
-                        });
-                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-left', left - 1);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-mid', 4);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-dc-right', DC_Modules.length - right);
-                    }
-                    // update visibility of the window
-                    for (var j = 0; j < DC_MultibarWindow.length; j++) {
-                        if (DC_Modules.includes(DC_MultibarWindow[j])) document.getElementById("dc-focus-5-" + DC_MultibarWindow[j]).style.display = "block";
-                    }
-                    DC_ModuleSelected = Updated;
-                    break;
-                case 'sig':
-                    if (!SIG_Modules.includes(Updated))
-                    {
-                        return false;
-                    }
-                    // Make all current in window invisible
-                    for (var j = 0; j < SIG_MultibarWindow.length; j++) {
-                        if (SIG_Modules.includes(SIG_MultibarWindow[j])) document.getElementById("sig-focus-5-" + SIG_MultibarWindow[j]).style.display = "none";
-                    }
-                    // update window according to the new selection
-                    if (!SIG_MultibarWindow.includes(Updated)) {      
-                        if(Math.max(...SIG_MultibarWindow) < Updated) { // on the right of the current window
-                            var delta = Updated - Math.max(...SIG_MultibarWindow);
-                            for (var i = 0; i < SIG_MultibarWindow.length; i++) {
-                                SIG_MultibarWindow[i] += delta;
-                            }
-                        }
-                        else {
-                            var delta = Math.min(...SIG_MultibarWindow) - Updated;
-                            for (var i = 0; i < SIG_MultibarWindow.length; i++) {
-                                SIG_MultibarWindow[i] -= delta;
-                            }
-                        }
-                    }
-                    if (SIG_Modules.length <= 4) {
-                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-left', 0);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-mid', SIG_Modules.length);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-right', 0);
-                    }
-                    else {
-                        var left = Math.min(...SIG_MultibarWindow);
-                        var right = Math.max(...SIG_MultibarWindow);
-                        var index = 0;
-                        document.getElementById('sig-scroll-bar').children.forEach(child => {
-                            if ((index < left || index > left)) {
-                                child.style.opacity = "0.3";
-                                if (index == 0 || index == document.getElementById('sig-scroll-bar').children.length - 1) {
-                                    child.style.opacity = "0";
-                                }
-                            }
-                            else {
-                                child.style.opacity = "1";
-                            }
-                            index++;
-                        });
-                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-left', left - 1);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-mid', 4);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-sig-right', SIG_Modules.length - right);
-                    }
-                    // update visibility of the window
-                    for (var j = 0; j < SIG_MultibarWindow.length; j++) {
-                        if (SIG_Modules.includes(SIG_MultibarWindow[j])) document.getElementById("sig-focus-5-" + SIG_MultibarWindow[j]).style.display = "block";
-                    }
-                    SIG_ModuleSelected = Updated;
-                    //var id = "sig-focus-5-" + SIG_ModuleSelected;
-                    focusTree[activePage][5 - 1].forEach(focus => { // find the active focusElement element, and extract the data to apply it to the UI.
-                        if (focus.id == activePage + '-focus-5-' + SIG_ModuleSelected) {
-                        }
-                    });
-                    var focusedMultibarModule = focusTree[activePage][5 - 1][getSelectedIndexSpecificRow(5)];
-                    document.getElementById('sig-focus-3-1').innerHTML = parseFloat(focusedMultibarModule.configuration.frequency).toFixed(2);
-                    document.getElementById('sig-focus-3-2').innerHTML = parseFloat(focusedMultibarModule.configuration.dutycycle).toFixed(1);
-                    document.getElementById('sig-focus-4-1').innerHTML = parseFloat(focusedMultibarModule.configuration.amplitude).toFixed(2);
-                    document.getElementById('sig-focus-4-2').innerHTML = focusedMultibarModule.configuration.offset;
-                    
-                    setSelected('sig-focus-2-1', 'sig', 2, 1, (focusedMultibarModule.configuration.type != 'SigSine'));
-                    setSelected('sig-focus-2-2', 'sig', 2, 2, (focusedMultibarModule.configuration.type != 'SigSqr'));
-                    setSelected('sig-focus-2-3', 'sig', 2, 3, (focusedMultibarModule.configuration.type != 'SigRamp'));
-                    
-                    break;
-                case 'osc':
-                    if (!OSC_Measurements.includes(Updated))
-                    {
-                        return false;
-                    }
-                    // Make all current in window invisible
-                    for (var j = 0; j < OSC_MultibarWindow.length; j++) {
-                        if (OSC_Measurements.includes(OSC_MultibarWindow[j])) document.getElementById("osc-focus-5-" + OSC_MultibarWindow[j]).style.display = "none";
-                    }
-                    // update window according to the new selection
-                    if (!OSC_MultibarWindow.includes(Updated)) {      
-                        if(Math.max(...OSC_MultibarWindow) < Updated) { // on the right of the current window
-                            var delta = Updated - Math.max(...OSC_MultibarWindow);
-                            for (var i = 0; i < OSC_MultibarWindow.length; i++) {
-                                OSC_MultibarWindow[i] += delta;
-                            }
-                        }
-                        else {
-                            var delta = Math.min(...OSC_MultibarWindow) - Updated;
-                            for (var i = 0; i < OSC_MultibarWindow.length; i++) {
-                                OSC_MultibarWindow[i] -= delta;
-                            }
-                        }
-                    }
-                    
-                    if (OSC_Measurements.length <= 4) {
-                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-left', 0);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-mid', OSC_Measurements.length);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-right', 0);
-                    }
-                    else {
-                        var left = Math.min(...OSC_MultibarWindow);
-                        var right = Math.max(...OSC_MultibarWindow);
-                        var index = 0;
-                        document.getElementById('osc-scroll-bar').children.forEach(child => {
-                            if ((index < left || index > left)) {
-                                child.style.opacity = "0.3";
-                                if (index == 0 || index == document.getElementById('osc-scroll-bar').children.length - 1) {
-                                    child.style.opacity = "0";
-                                }
-                            }
-                            else {
-                                child.style.opacity = "1";
-                            }
-                            index++;
-                        });
-                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-left', left - 1);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-mid', 4);
-                        document.querySelector(':root').style.setProperty('--scroll-bar-osc-right', OSC_Measurements.length - right);
-                    }
-                    // update visibility of the window
-                    for (var j = 0; j < OSC_MultibarWindow.length; j++) {
-                        if (OSC_Measurements.includes(OSC_MultibarWindow[j])) document.getElementById("osc-focus-5-" + OSC_MultibarWindow[j]).style.display = "block";
-                    }
-                    OSC_MeasurementSelected = Updated;
-                    break;
-            }
-
-            if (onlyScroll == true) {
-                // step 1: reset all modules to NOT focused
-                focusTree[Module][4].forEach(element => {
-                    element.setFocus(false);
-                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
-                        element.setFocus(true);
-                    }
-                });
-            }
-            else if (onlyScroll == false) { // actual selection
-                // step 1: reset all modules to NOT focused and NOT selected
-                focusTree[Module][4].forEach(element => {
-                    element.setFocus(false);
-                    element.setSelected(false);
-                    if (element.getFocusAndSubfocusNumber()[1] == Updated){
-                        element.setFocus(true);
-                        element.setSelected(true);
-                    }
-                });
-            }
         }
     </script>
     <script>
@@ -1211,7 +381,7 @@
             
             // before updating the data, lets compare for the encoder data
             if (!firstTick) {
-                hardwareEncoderTick(receivedDataPrev[0], receivedData[0]);
+                //hardwareEncoderTick(receivedDataPrev[0], receivedData[0]);
             }
             else { // always skip the first tick, since that occurs when the page gets loaded and it move the selection by one.
                 firstTick = false;
@@ -1220,7 +390,7 @@
             for (var buttonIndex = 1; buttonIndex < 4; buttonIndex++) {
                 if (receivedData[buttonIndex] != 0) {
                     console.log("button " + receivedData[buttonIndex]);
-                    hardwareButtonClick(receivedData[buttonIndex]);
+                    //hardwareButtonClick(receivedData[buttonIndex]);
                 }
             }
             receivedDataPrev = [...receivedData];
@@ -1230,43 +400,30 @@
             socket.emit('update', buffer);
         }
 
-        window.onload = function(){
+        document.querySelectorAll('.number-input').forEach(function(element) {
+            element.addEventListener('input', function() {
+                const min = parseFloat(this.min);
+                const max = parseFloat(this.max);
+                const step = parseFloat(this.step);
+                let value = parseFloat(this.value);
+            
+                //if (isNaN(value)) return;  // If the input value is not a number, do nothing.
+                console.log(value);
+                // Adjust value to be within the min and max bounds
+                if (value < min) {
+                    this.value = min;
+                    return;
+                } else if (value > max) {
+                    this.value = max;
+                    return;
+                }
 
-            createDCModule(true, '15.00', 'V', '10.00', 'mA');
-
-            createOSCMeasurement(true, 'Phase', '<span style="color: var(--color1)">1</span> → <span style="color: var(--color2)">2</span>', '30', '° (deg)');
-            createOSCMeasurement(true, 'V<sub>RMS</sub>', '<span style="color: var(--color1)">1</span>', '20.18', 'mV');
-            createOSCMeasurement(true, 'Phase', '<span style="color: var(--color1)">1</span> → <span style="color: var(--color3)">2</span>', '30', '° (deg)');
-            createOSCMeasurement(true, 'V<sub>RMS</sub>', '<span style="color: var(--color4)">1</span>', '20.18', 'mV');
-            createOSCMeasurement(true, 'Phase', '<span style="color: var(--color1)">1</span> → <span style="color: var(--color5)">2</span>', '30', '° (deg)');
-            createOSCMeasurement(true, 'V<sub>RMS</sub>', '<span style="color: var(--color6)">1</span>', '20.18', 'mV');
-
-            createSIGModule(true, 'SigSine', '20.10kHz', '4.00', 'V<sub>pp</sub>', 10, 0);
-            createSIGModule(true, 'SigSqr', '1.00kHz', '3.30', 'V<sub>pp</sub>', 10, 0);
-            createSIGModule(true, 'SigRamp', '100.00kHz', '1.00', 'V<sub>pp</sub>', 10, 0);
-            createSIGModule(true, 'SigSine', '20.10kHz', '4.00', 'V<sub>pp</sub>', 10, 0);
-            createSIGModule(true, 'SigSqr', '1.00kHz', '3.30', 'V<sub>pp</sub>', 10, 0);
-            createSIGModule(true, 'SigRamp', '10.00kHz', '1.00', 'V<sub>pp</sub>', 10, 0);
-            createSIGModule(true, 'SigSqr', '1.00kHz', '3.30', 'V<sub>pp</sub>', 10, 0);
-            createSIGModule(true, 'SigRamp', '10.00kHz', '1.00', 'V<sub>pp</sub>', 10, 0);
-
-            createLOGICChannel("I<sup>2</sup>C SDA");
-            createLOGICChannel("I<sup>2</sup>C SCL");
-            createLOGICChannel("I<sup>2</sup>C SDA");
-            createLOGICChannel("I<sup>2</sup>C SCL");
-            createLOGICChannel("I<sup>2</sup>C SDA");
-            createLOGICChannel("I<sup>2</sup>C SCL");
-            createLOGICChannel("I<sup>2</sup>C SDA");
-            createLOGICChannel("I<sup>2</sup>C SCL");
-            createLOGICChannel("I<sup>2</sup>C SDA");
-            createLOGICChannel("I<sup>2</sup>C SCL");
-
-            updateLogicChannels();
-
-            updateMultibar(1, 'dc');
-            updateMultibar(1, 'osc');
-            updateMultibar(1, 'sig');
-        }
+                if (!isNaN(value)) {
+                    console.log(value);
+                    this.value = value;
+                }
+            });
+        });
         
         window.onresize = function() {
             location.reload();
