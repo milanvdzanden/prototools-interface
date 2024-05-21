@@ -49,10 +49,11 @@ function getSelectedElementInRow(page, row) {
 }
 
 class FocusElement {
-    constructor(type, uid, next_uid, location = {x: -1, y: -1}, defaultValues = {}) {
+    constructor(type, uid, prev_uid, next_uid, location = {x: -1, y: -1}, defaultValues = {}) {
         this.type = type;
         this.uid = uid;
         this.next_uid = next_uid;
+        this.prev_uid = prev_uid;
         this.values = defaultValues;
         this.location = location;
     }
@@ -100,13 +101,24 @@ class FocusElement {
     }
 
     /* focusses on the next element in the row */
-    scrollToNext() {
-        /* The only selectable element in the row */
-        if (this.next_uid == this.uid) {
-            focusTree[this.next_uid].setSelected(true);
+    scrollToNext(direction = 1) {
+        if (direction == 1) {
+            /* The only selectable element in the row */
+            if (this.next_uid == this.uid) {
+                focusTree[this.next_uid].setSelected(true);
+            }
+            else {
+                focusTree[this.next_uid].setFocus(true);
+            }
         }
         else {
-            focusTree[this.next_uid].setFocus(true);
+            /* The only selectable element in the row */
+            if (this.prev_uid == this.uid) {
+                focusTree[this.prev_uid].setSelected(true);
+            }
+            else {
+                focusTree[this.prev_uid].setFocus(true);
+            }
         }
     }
 
@@ -130,11 +142,25 @@ class FocusElement {
                     break;
     
                 case FocusElementType.sig_type:
+                    var DomElement = document.querySelector(`[uid="${this.uid}"]`);
+                    DomElement.click();
                     break;
     
                 case FocusElementType.sig_input:
                     var DomElement = document.querySelector(`[uid="${this.uid}"]`);
-                    stepNumberInput(DomElement, direction);
+                    /* If the sig input is focussed but not selected, select it first */
+                    if (DomElement.classList.contains('focus') && !DomElement.classList.contains('selected')) {
+                        this.setSelected(true);
+                    }
+                    else {
+                        /* If the sig input is both selected and focussed, but the interaction is just clicking, deselect it instead of changing the number */
+                        if (DomElement.classList.contains('focus') && DomElement.classList.contains('selected') && direction == 0) {
+                            this.setSelected(false);
+                        }
+                        else {
+                            stepNumberInput(DomElement, direction);
+                        }
+                    }
                     break;
     
                 case FocusElementType.sig_module:
@@ -157,14 +183,18 @@ function stepNumberInput(inputElement, steps) {
     const max = inputElement.max ? parseFloat(inputElement.max) : Infinity;
     const step = inputElement.step ? parseFloat(inputElement.step) : 1;
 
-    value = Math.min(Math.max(value + step*steps, min), max);
+    console.log(value, step*steps, value + step*steps);
+    value = Math.min(Math.max(parseFloat(value + step*steps).toFixed(2), min), max);
     inputElement.value = value;
 }
 
 function changeFocusRow(rowNumber) {
-    var focussedElement = getFocussedElementInRow(activePage, activeRow);
-    if (focussedElement) {
-        focussedElement.setFocus(false);
+    /* remove focus from all rows */
+    for (var row = 1; row <= 5; row++) {
+        var element = getFocussedElementInRow(activePage, row)
+        if (element) {
+            element.setFocus(false);
+        }
     }
 
     activeRow = rowNumber;
@@ -178,15 +208,26 @@ function changeFocusRow(rowNumber) {
     else {
         /* Get the first element in that row (that is selectable) and set focus and selected to it */
         var activeRowElement = document.querySelector(`#${activePage}-focus-${activeRow}`);
-        activeRowElement.querySelectorAll('[uid]').forEach(selectableElement => {
+        var rowQuery = activeRowElement.querySelectorAll('[uid]');
+        for (var index = 0; index < rowQuery.length; index++){
+            selectableElement = rowQuery[index];
+
             if (!selectableElement.disabled) {
                 var ElementUid = selectableElement.getAttribute('uid');
-                focusTree[ElementUid].setSelected(true);
                 focusTree[ElementUid].setFocus(true);
+
+                /* If there is only one element in that row, select it already */
+                if (rowQuery.length == 1) {
+                    focusTree[ElementUid].setSelected(true);
+                }
+
+                break;
             }
-        })
+        }
     }
 }
+
+var encoderButtonDown = false;
 
 function hardwareButtonClick(buttonNumber) {
     switch (buttonNumber) {
@@ -209,11 +250,40 @@ function hardwareButtonClick(buttonNumber) {
             changeFocusRow(1);
             break;
         case 7: // BTN ENCODER SW RELEASED
-            interactFocusElement();
+            getFocussedElementInRow(activePage, activeRow).interact()
             encoderButtonDown = false;
             // find active selected element
             break;
         case 8: // BTN ENCODER SW PRESSED DOWN
             encoderButtonDown = true;
+    }
+}
+
+function hardwareEncoderTick(previousEncoderPosition, newEncoderPosition) {
+    var differenceEncoderPosition = (newEncoderPosition - previousEncoderPosition);
+    if (differenceEncoderPosition == 255) differenceEncoderPosition = -1;
+    if (differenceEncoderPosition == 254) differenceEncoderPosition = -2;
+    if (differenceEncoderPosition == 253) differenceEncoderPosition = -3;
+    if (differenceEncoderPosition == 252) differenceEncoderPosition = -4;
+    if (differenceEncoderPosition == -255) differenceEncoderPosition = 1;
+    if (differenceEncoderPosition == -254) differenceEncoderPosition = 2;
+    if (differenceEncoderPosition == -253) differenceEncoderPosition = 3;
+    if (differenceEncoderPosition == -252) differenceEncoderPosition = 4;
+
+    if (differenceEncoderPosition != 0) {
+        /* If the focussed element is already selected, scrolling the encoder would mean changing the value, otherwise scroll to other nearby elements */
+        if (getFocussedElementInRow(activePage, activeRow) == getSelectedElementInRow(activePage, activeRow)) {
+            if (activeRow == 1 | getFocussedElementInRow(activePage, activeRow).type == FocusElementType.sig_type) { /* if the current row is the navbar, do not interact but scroll to next instead */
+                for (var i = 0; i < Math.abs(differenceEncoderPosition); i++) {
+                    getFocussedElementInRow(activePage, activeRow).scrollToNext(differenceEncoderPosition > 0 ? 1 : 0);
+                }
+            }
+            else {
+                getFocussedElementInRow(activePage, activeRow).interact(differenceEncoderPosition);
+            }
+        }
+        else {
+            getFocussedElementInRow(activePage, activeRow).scrollToNext(differenceEncoderPosition > 0 ? 1 : 0);
+        }
     }
 }
