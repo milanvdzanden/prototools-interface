@@ -15,6 +15,14 @@ const FocusElementType = {
     logic_nav_tab: 23 
 }
 
+function removeFromArray(arr, value) {
+    var index = arr.indexOf(value);
+    if (index > -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
+}
+
 function TypeToPage(focus_element_type_inst) {
     if (focus_element_type_inst == FocusElementType.dc_input |
         focus_element_type_inst == FocusElementType.dc_output |
@@ -132,7 +140,17 @@ class FocusElement {
             switch (this.type) {
                 case FocusElementType.dc_input:
                     var DomElement = document.querySelector(`[uid="${this.uid}"]`);
-                    stepNumberInput(DomElement, direction);
+                    
+                    if (DomElement.classList.contains('focus') && !DomElement.classList.contains('selected')) {
+                        this.setSelected(true);
+                    }
+                    else {
+                        var newValue = stepNumberInput(DomElement, direction); /* Step number input returns the value to which it is now set */
+                        if (this.uid == 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba') { getSelectedElementInRow(activePage, 5).values.voltage = newValue } // Voltage
+                        if (this.uid == 'd1fa07ee-2712-461d-ab16-dd984b4f081a') { getSelectedElementInRow(activePage, 5).values.setpoint = newValue } // Setpoint
+                        
+                        updateMultibarValues('dc');
+                    }
                     break;
     
                 case FocusElementType.dc_output:
@@ -143,6 +161,8 @@ class FocusElement {
                     /* If the multibar module is focussed but not selected, select it first */
                     if (DomElement.classList.contains('focus') && !DomElement.classList.contains('selected')) {
                         this.setSelected(true);
+
+                        updateMultibarValues('dc');
                     }
                     break;
     
@@ -164,6 +184,7 @@ class FocusElement {
                         }
                         else {
                             stepNumberInput(DomElement, direction);
+                            updateMultibarValues('dc');
                         }
                     }
                     break;
@@ -191,6 +212,7 @@ function stepNumberInput(inputElement, steps) {
     console.log(value, step*steps, value + step*steps);
     value = Math.min(Math.max(parseFloat(value + step*steps).toFixed(2), min), max);
     inputElement.value = value;
+    return value;
 }
 
 function changeFocusRow(rowNumber) {
@@ -216,16 +238,17 @@ function changeFocusRow(rowNumber) {
         var rowQuery = activeRowElement.querySelectorAll('[uid]');
         for (var index = 0; index < rowQuery.length; index++){
             selectableElement = rowQuery[index];
-
+    
             if (!selectableElement.disabled) {
                 var ElementUid = selectableElement.getAttribute('uid');
                 focusTree[ElementUid].setFocus(true);
-
+    
                 /* If there is only one element in that row, select it already */
-                if (rowQuery.length == 1) {
+                /* Use a filter to count how many elements in that row are actually selectable */
+                if (Array.from(rowQuery).filter(element => !element.disabled).length == 1) {
                     focusTree[ElementUid].setSelected(true);
                 }
-
+    
                 break;
             }
         }
@@ -312,7 +335,6 @@ function updateMultibarIndeces(page) {
         
                 if (prevIndex < 0) { prevIndex = DC_Modules.length - 1;}
                 if (nextIndex >= DC_Modules.length ) { nextIndex = 0;}
-                
                 focusTree[uid].prev_uid = DC_Modules[prevIndex];
                 focusTree[uid].next_uid = DC_Modules[nextIndex];
             }
@@ -320,9 +342,60 @@ function updateMultibarIndeces(page) {
     }
 }
 
+/* Function to synchronise the multibar value with the UI */
+function updateMultibarValues(page) {
+    if (!getFocussedElementInRow(activePage, 5)) { // Check if there are any selected modules already, if not select the default
+        changeFocusRow(5);
+        
+        /* Get the first element in that row (that is selectable) and set focus and selected to it */
+        var activeRowElement = document.querySelector(`#${activePage}-focus-${activeRow}`);
+        var rowQuery = activeRowElement.querySelectorAll('[uid]');
+        for (var index = 0; index < rowQuery.length; index++){
+            selectableElement = rowQuery[index];
+    
+            if (!selectableElement.disabled) {
+                var ElementUid = selectableElement.getAttribute('uid');
+                focusTree[ElementUid].setFocus(true);
+                focusTree[ElementUid].setSelected(true);
+                break;
+            }
+        }
+    }
+    switch (page) {
+        /* This is different for each page, take a look at all the IDs and what they link to */
+        case 'dc':
+            /* If there are no DC_Modules, no update is needed */
+            if (DC_Modules.length == 0) {
+                break;
+            }
+            /* Update the UI with the data of this multibar */
+            document.querySelector(`[uid="e6f0ad7f-98cb-4ffd-a967-73592a9673ba"]`).value = getSelectedElementInRow(page, 5).values.voltage; // Voltage
+            document.querySelector(`#dc-voltage-label`).innerHTML = getSelectedElementInRow(page, 5).values.voltageUnit; // VoltageUnit
+            document.querySelector(`[uid="d1fa07ee-2712-461d-ab16-dd984b4f081a"]`).value = getSelectedElementInRow(page, 5).values.setpoint; // Setpoint
+            document.querySelector(`[uid="12f81bce-fded-4eb8-9352-97ea88fcc59b"]`).value = getSelectedElementInRow(page, 5).values.current; // Current
+            document.querySelector(`#dc-current-label`).innerHTML = getSelectedElementInRow(page, 5).values.currentUnit; // CurrentUnit
+            
+            DC_Modules.forEach(uid => {
+                var domElement = document.querySelector(`[uid="${uid}"]`);
+                var focusElement = focusTree[uid];
+                document.querySelector(`#DC_Value_Top_${uid}`).innerHTML = focusElement.values.voltage;
+                document.querySelector(`#DC_Type_Top_${uid}`).innerHTML = focusElement.values.voltageUnit;
+                document.querySelector(`#DC_Value_Bottom_${uid}`).innerHTML = focusElement.values.current;
+                document.querySelector(`#DC_Type_Bottom_${uid}`).innerHTML = focusElement.values.currentUnit;
+            });
+            break;
+    }
+}
+
+/* Function to update the visible 4 modules (window) */
 function updateMultibarWindow(page) {
     switch (page) {
         case 'dc':
+            /* If there are no DC_Modules, change the opacity */
+            document.documentElement.style.setProperty('--dc-module-count', DC_Modules.length + 0.05);
+            if (DC_Modules.length == 0) {
+                break;
+            }
 
             DC_Modules.forEach(uid => {
                 var domElement = document.querySelector(`[uid="${uid}"]`);
@@ -332,9 +405,7 @@ function updateMultibarWindow(page) {
             for (var i = 0; i < DC_Modules.length; i++) {
                 var uid = DC_Modules[i];
                 var focusElement = focusTree[uid];
-                
-                if (focusElement.isFocused()) {
-                    console.log(i, uid);
+                if ((activeRow == 5) ? focusElement.isFocused() : focusElement.isSelected()) {
                     /* Check wether it is outside the window on the left or the right */
                     if (i < Math.min(...DC_ModulesWindow)) { /* Left */
                         var delta = Math.min(...DC_ModulesWindow) - i; /* Calculate the amount the window has to be shifted */
@@ -346,14 +417,10 @@ function updateMultibarWindow(page) {
                         DC_ModulesWindow = DC_ModulesWindow.map(v => v + delta);
                         console.log('right', delta);
                     }
-                    else { /* Already in the window */
-
-                    }
                     
                     DC_ModulesWindow.forEach(index => {
                         if (index < DC_Modules.length) { /* The window is by default too big, ignore the out of range window elements */
                             var visibleUid = DC_Modules[index];
-                            console.log(index);
                             var domElement = document.querySelector(`[uid="${visibleUid}"]`);
                             domElement.style.display = 'block';
                         }
@@ -362,4 +429,43 @@ function updateMultibarWindow(page) {
             }
             break;
     }
+}
+
+/* Removes a specific module by UID */
+function removeMultibarModule(uid) {
+    /* Get the DOM elements */
+    var child = document.querySelector(`[uid="${uid}"]`);
+    var parent = document.getElementById(`${TypeToPage(focusTree[uid].type)}-focus-5`);
+
+    /* Remove any trace of the elements existence */
+    parent.removeChild(child);
+    delete focusTree[uid];
+    DC_Modules = removeFromArray(DC_Modules, uid);
+
+    /* Update the UI accordingly */
+    updateMultibarValues('dc');
+    updateMultibarIndeces('dc');
+    updateMultibarWindow('dc');
+}
+
+/* Function used as the onclick handler for multibar modules */
+function selectMultibarModule(uid) {
+    var domElement = document.querySelector(`[uid="${this.uid}"]`);
+    var focusElement = focusTree[uid];
+
+    /* First remove focus and selected from current module */
+    var element = getFocussedElementInRow(activePage, 5)
+    if (element) {
+        element.setFocus(false);
+    }
+    var element = getSelectedElementInRow(activePage, 5)
+    if (element) {
+        element.setSelected(false);
+    }
+
+    focusElement.setSelected(true);
+    if (activeRow == 5) {
+        focusElement.setFocus(true);
+    }
+    updateMultibarValues(activePage);
 }

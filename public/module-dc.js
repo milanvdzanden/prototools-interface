@@ -11,7 +11,7 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
     }
 
     containerDiv.setAttribute('uid', uid);
-    containerDiv.setAttribute('onclick', 'console.log("' + uid + '")');
+    containerDiv.setAttribute('onclick', `selectMultibarModule('${uid}')`);
     containerDiv.style.display = 'block';
 
     // Create the triangle div
@@ -76,7 +76,7 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
 
     DC_Modules.push(uid);
 
-    var newFocusElement = new FocusElement(FocusElementType.dc_module, uid, 'none', 'none', {x: DC_Modules.length + 1, y: 5});
+    var newFocusElement = new FocusElement(FocusElementType.dc_module, uid, 'none', 'none', {x: DC_Modules.length + 1, y: 5}, {voltage: Value1, voltageUnit: Type1, current: Value2, currentUnit: Type2, setpoint: 0});
 
     focusTree[uid] = newFocusElement;
 
@@ -88,6 +88,8 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
     scrollElement.classList.add('scroll-bar-element');
     document.getElementById('dc-scroll-bar').appendChild(scrollElement);
 
+    /* Update the DC Multibar */
+    updateMultibarValues('dc');
     updateMultibarIndeces('dc');
     updateMultibarWindow('dc');
 }

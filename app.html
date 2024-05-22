@@ -57,31 +57,31 @@
             <div class="grid-dc-row dc-row-1" id="dc-focus-2">
                 <p class="dc-column">
                     <span class="dc-column-type">VOLTAGE</span>
-                    <span class="dc-column-value dc-wide-value" id="dc-focus-2-1"><input class="number-input" uid='e6f0ad7f-98cb-4ffd-a967-73592a9673ba' type="number" lang="en" value="15" step="0.01" min="1" max="20"></span>
-                    <span class="dc-column-label">V</span>
+                    <span class="dc-column-value dc-wide-value" id="dc-focus-2-1"><input class="number-input" target='voltage' uid='e6f0ad7f-98cb-4ffd-a967-73592a9673ba' type="number" value="15" step="0.01" min="1" max="20"></span>
+                    <span class="dc-column-label" id="dc-voltage-label">V</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-2" id="dc-focus-3">
                 <p class="dc-column">
                     <span class="dc-column-type">CURRENT</span>
-                    <span class="dc-column-value dc-wide-value"><input class="number-input" uid='12f81bce-fded-4eb8-9352-97ea88fcc59b' type="number" lang="en" value="15" disabled></span>
-                    <span class="dc-column-label">mA</span>
+                    <span class="dc-column-value dc-wide-value"><input class="number-input" uid='12f81bce-fded-4eb8-9352-97ea88fcc59b' type="number" value="15" disabled></span>
+                    <span class="dc-column-label" id="dc-current-label">mA</span>
                     <span class="dc-column-type">TARGET</span>
-                    <span class="dc-column-value" id="dc-focus-3-1"><input class="number-input" uid='d1fa07ee-2712-461d-ab16-dd984b4f081a' type="number" lang="en" value="1000" step="1" min="0" max="2000"></span>
+                    <span class="dc-column-value" id="dc-focus-3-1"><input class="number-input" target='setpoint' uid='d1fa07ee-2712-461d-ab16-dd984b4f081a' type="number" value="1000" step="1" min="0" max="2000"></span>
                     <span class="dc-column-label">mA</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-3" id="dc-focus-4">
                 <p class="dc-column">
                     <span class="dc-column-type">POWER</span>
-                    <span class="dc-column-value dc-wide-value"><input class="number-input" uid='c04bd3c7-e714-4247-b2d9-3b2abe51e059' type="number" lang="en" value="1" disabled></span>
+                    <span class="dc-column-value dc-wide-value"><input class="number-input" uid='c04bd3c7-e714-4247-b2d9-3b2abe51e059' type="number" value="1" disabled></span>
                     <span class="dc-column-label">W</span>
                 </p>   
             </div>
             <div class="grid-multibar" id="dc-focus-5">
                 <div class="grid-multibar-arrow" id="multibar-dc-arrow">
-                    <div id="dc-left">◄</div>
-                    <div id="dc-right">►</div>
+                    <div id="dc-left" onclick="changeFocusRow(5); hardwareEncoderTick(2,1); hardwareButtonClick(7)">◄</div>
+                    <div id="dc-right" onclick="changeFocusRow(5); hardwareEncoderTick(1,2); hardwareButtonClick(7)">►</div>
                 </div>
             </div>
             <div class="grid-sidebar">
@@ -421,7 +421,7 @@
         }
     </script>
     <script>
-        
+        createDCModule(true, '17.00', 'V', '10.00', 'mA');
 
         document.querySelectorAll('.number-input').forEach(function(element) {
             element.addEventListener('input', function() {
@@ -430,8 +430,6 @@
                 const step = parseFloat(this.step);
                 let value = parseFloat(this.value);
             
-                //if (isNaN(value)) return;  // If the input value is not a number, do nothing.
-                console.log(value);
                 // Adjust value to be within the min and max bounds
                 if (value < min) {
                     this.value = min;
@@ -442,8 +440,14 @@
                 }
 
                 if (!isNaN(value)) {
-                    console.log(value);
                     this.value = value;
+                }
+
+                var targetVariable = this.getAttribute('target'); /* Gets the name of the variable, for example 'voltage' or 'setpoint' that is stored inside of an input element */
+                var focusElement = getSelectedElementInRow(activePage, 5).values[targetVariable] = this.value;
+
+                if (!isNaN(value)) {
+                    updateMultibarValues('dc');
                 }
             });
         });
