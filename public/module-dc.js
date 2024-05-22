@@ -12,7 +12,7 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
 
     containerDiv.setAttribute('uid', uid);
     containerDiv.setAttribute('onclick', 'console.log("' + uid + '")');
-    containerDiv.style.display = 'none';
+    containerDiv.style.display = 'block';
 
     // Create the triangle div
     var triangleDiv = document.createElement('div');
@@ -76,6 +76,10 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
 
     DC_Modules.push(uid);
 
+    var newFocusElement = new FocusElement(FocusElementType.dc_module, uid, 'none', 'none', {x: DC_Modules.length + 1, y: 5});
+
+    focusTree[uid] = newFocusElement;
+
     if (append) {
         document.getElementById("dc-focus-5").insertBefore(containerDiv, document.getElementById('multibar-dc-arrow'));
     }
@@ -83,4 +87,7 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
     var scrollElement = document.createElement('div');
     scrollElement.classList.add('scroll-bar-element');
     document.getElementById('dc-scroll-bar').appendChild(scrollElement);
+
+    updateMultibarIndeces('dc');
+    updateMultibarWindow('dc');
 }

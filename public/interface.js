@@ -12,7 +12,7 @@ const FocusElementType = {
     dc_nav_tab: 20,
     sig_nav_tab: 21,
     osc_nav_tab: 22,
-    logic_nav_tab: 23
+    logic_nav_tab: 23 
 }
 
 function TypeToPage(focus_element_type_inst) {
@@ -139,6 +139,11 @@ class FocusElement {
                     break;
     
                 case FocusElementType.dc_module:
+                    var DomElement = document.querySelector(`[uid="${this.uid}"]`);
+                    /* If the multibar module is focussed but not selected, select it first */
+                    if (DomElement.classList.contains('focus') && !DomElement.classList.contains('selected')) {
+                        this.setSelected(true);
+                    }
                     break;
     
                 case FocusElementType.sig_type:
@@ -273,9 +278,14 @@ function hardwareEncoderTick(previousEncoderPosition, newEncoderPosition) {
     if (differenceEncoderPosition != 0) {
         /* If the focussed element is already selected, scrolling the encoder would mean changing the value, otherwise scroll to other nearby elements */
         if (getFocussedElementInRow(activePage, activeRow) == getSelectedElementInRow(activePage, activeRow)) {
-            if (activeRow == 1 | getFocussedElementInRow(activePage, activeRow).type == FocusElementType.sig_type) { /* if the current row is the navbar, do not interact but scroll to next instead */
+            if (activeRow == 1 | 
+                getFocussedElementInRow(activePage, activeRow).type == FocusElementType.sig_type |
+                [5,6,7,8].includes(getFocussedElementInRow(activePage, activeRow).type)) { /* if the current row is the navbar, do not interact but scroll to next instead, same for signal type selection and for any multibar items */
                 for (var i = 0; i < Math.abs(differenceEncoderPosition); i++) {
                     getFocussedElementInRow(activePage, activeRow).scrollToNext(differenceEncoderPosition > 0 ? 1 : 0);
+
+                    /* If the element is a multibar item, also update the window visibility (i.e the 4 that can be shown at maximum at any time) */
+                    updateMultibarWindow(activePage);
                 }
             }
             else {
@@ -284,6 +294,72 @@ function hardwareEncoderTick(previousEncoderPosition, newEncoderPosition) {
         }
         else {
             getFocussedElementInRow(activePage, activeRow).scrollToNext(differenceEncoderPosition > 0 ? 1 : 0);
+            
+            /* If the element is a multibar item, also update the window visibility (i.e the 4 that can be shown at maximum at any time) */
+            updateMultibarWindow(activePage);
         }
+    }
+}
+
+/* Function that re-assings the next and previous UIDs to the elements in the multibar */
+function updateMultibarIndeces(page) {
+    switch (page) {
+        case 'dc':
+            for (let i = 0; i < DC_Modules.length; i++) {
+                var uid = DC_Modules[i];
+                var nextIndex = (i + 1);
+                var prevIndex = (i - 1);
+        
+                if (prevIndex < 0) { prevIndex = DC_Modules.length - 1;}
+                if (nextIndex >= DC_Modules.length ) { nextIndex = 0;}
+                
+                focusTree[uid].prev_uid = DC_Modules[prevIndex];
+                focusTree[uid].next_uid = DC_Modules[nextIndex];
+            }
+            break;
+    }
+}
+
+function updateMultibarWindow(page) {
+    switch (page) {
+        case 'dc':
+
+            DC_Modules.forEach(uid => {
+                var domElement = document.querySelector(`[uid="${uid}"]`);
+                domElement.style.display = 'none';
+            });
+
+            for (var i = 0; i < DC_Modules.length; i++) {
+                var uid = DC_Modules[i];
+                var focusElement = focusTree[uid];
+                
+                if (focusElement.isFocused()) {
+                    console.log(i, uid);
+                    /* Check wether it is outside the window on the left or the right */
+                    if (i < Math.min(...DC_ModulesWindow)) { /* Left */
+                        var delta = Math.min(...DC_ModulesWindow) - i; /* Calculate the amount the window has to be shifted */
+                        DC_ModulesWindow = DC_ModulesWindow.map(v => v - delta);
+                        console.log('left', delta);
+                    }
+                    else if (i > Math.max(...DC_ModulesWindow)) { /* Right */
+                        var delta = i - Math.max(...DC_ModulesWindow); /* Calculate the amount the window has to be shifted */
+                        DC_ModulesWindow = DC_ModulesWindow.map(v => v + delta);
+                        console.log('right', delta);
+                    }
+                    else { /* Already in the window */
+
+                    }
+                    
+                    DC_ModulesWindow.forEach(index => {
+                        if (index < DC_Modules.length) { /* The window is by default too big, ignore the out of range window elements */
+                            var visibleUid = DC_Modules[index];
+                            console.log(index);
+                            var domElement = document.querySelector(`[uid="${visibleUid}"]`);
+                            domElement.style.display = 'block';
+                        }
+                    });
+                }
+            }
+            break;
     }
 }
