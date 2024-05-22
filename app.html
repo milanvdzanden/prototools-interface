@@ -59,6 +59,9 @@
                     <span class="dc-column-type">VOLTAGE</span>
                     <span class="dc-column-value dc-wide-value" id="dc-focus-2-1"><input class="number-input" target='voltage' uid='e6f0ad7f-98cb-4ffd-a967-73592a9673ba' type="number" value="15" step="0.01" min="1" max="20"></span>
                     <span class="dc-column-label" id="dc-voltage-label">V</span>
+                    <span class="dc-column-type">MODE</span>
+                    <span class="dc-column-toggle toggled" id="dc-focus-2-2" onclick="dcTypeSelection('dc-focus-2-2')" uid='91edd507-ce08-4d7f-bf7c-0db93952de51'>CV</span>
+                    <span class="dc-column-toggle" id="dc-focus-2-3" onclick="dcTypeSelection('dc-focus-2-3')" uid='8551c08d-ca77-466d-bbb6-25cd2e484e0b'>CC</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-2" id="dc-focus-3">
@@ -298,7 +301,9 @@
             '8409ab76-f905-4257-932b-b2d12429f636': new FocusElement(FocusElementType.dc_nav_tab, '8409ab76-f905-4257-932b-b2d12429f636', 'be96124e-02c9-4305-abe8-3538641b039e', '980163ec-ad83-4f6f-8528-2e76a46b1fc6', {x: 5, y: 1}),
             '980163ec-ad83-4f6f-8528-2e76a46b1fc6': new FocusElement(FocusElementType.dc_nav_tab, '980163ec-ad83-4f6f-8528-2e76a46b1fc6', '8409ab76-f905-4257-932b-b2d12429f636', 'dbb30aa5-7a21-4767-82d4-0e23c184fb4b', {x: 6, y: 1}),
         
-            'e6f0ad7f-98cb-4ffd-a967-73592a9673ba': new FocusElement(FocusElementType.dc_input, 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', {x: 1, y: 2}),
+            'e6f0ad7f-98cb-4ffd-a967-73592a9673ba': new FocusElement(FocusElementType.dc_input, 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', '8551c08d-ca77-466d-bbb6-25cd2e484e0b', '91edd507-ce08-4d7f-bf7c-0db93952de51', {x: 1, y: 2}),
+            '91edd507-ce08-4d7f-bf7c-0db93952de51': new FocusElement(FocusElementType.dc_mode, '91edd507-ce08-4d7f-bf7c-0db93952de51', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', '8551c08d-ca77-466d-bbb6-25cd2e484e0b', {x: 2, y: 2}),
+            '8551c08d-ca77-466d-bbb6-25cd2e484e0b': new FocusElement(FocusElementType.dc_mode, '8551c08d-ca77-466d-bbb6-25cd2e484e0b', '91edd507-ce08-4d7f-bf7c-0db93952de51', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', {x: 3, y: 2}),
 
             '12f81bce-fded-4eb8-9352-97ea88fcc59b': new FocusElement(FocusElementType.dc_output, '12f81bce-fded-4eb8-9352-97ea88fcc59b', 'none', 'none', {x: 1, y: 3}),
             'd1fa07ee-2712-461d-ab16-dd984b4f081a': new FocusElement(FocusElementType.dc_input, 'd1fa07ee-2712-461d-ab16-dd984b4f081a', 'd1fa07ee-2712-461d-ab16-dd984b4f081a', 'd1fa07ee-2712-461d-ab16-dd984b4f081a', {x: 2, y: 3}),
@@ -421,7 +426,7 @@
         }
     </script>
     <script>
-        createDCModule(true, '17.00', 'V', '10.00', 'mA');
+        createDCModule(true, '17.00', 'V', '10', 'mA');
 
         document.querySelectorAll('.number-input').forEach(function(element) {
             element.addEventListener('input', function() {

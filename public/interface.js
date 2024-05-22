@@ -8,6 +8,7 @@ const FocusElementType = {
     sig_module: 6,
     osc_module: 7,
     logic_module: 8,
+    dc_mode: 9,
 
     dc_nav_tab: 20,
     sig_nav_tab: 21,
@@ -27,7 +28,8 @@ function TypeToPage(focus_element_type_inst) {
     if (focus_element_type_inst == FocusElementType.dc_input |
         focus_element_type_inst == FocusElementType.dc_output |
         focus_element_type_inst == FocusElementType.dc_nav_tab |
-        focus_element_type_inst == FocusElementType.dc_module
+        focus_element_type_inst == FocusElementType.dc_module |
+        focus_element_type_inst == FocusElementType.dc_mode
     ) {return 'dc'}
     if (focus_element_type_inst == FocusElementType.sig_type |
         focus_element_type_inst == FocusElementType.sig_input |
@@ -144,16 +146,24 @@ class FocusElement {
                     if (DomElement.classList.contains('focus') && !DomElement.classList.contains('selected')) {
                         this.setSelected(true);
                     }
-                    else {
-                        var newValue = stepNumberInput(DomElement, direction); /* Step number input returns the value to which it is now set */
-                        if (this.uid == 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba') { getSelectedElementInRow(activePage, 5).values.voltage = newValue } // Voltage
-                        if (this.uid == 'd1fa07ee-2712-461d-ab16-dd984b4f081a') { getSelectedElementInRow(activePage, 5).values.setpoint = newValue } // Setpoint
-                        
-                        updateMultibarValues('dc');
+                    else if (DomElement.classList.contains('focus') && DomElement.classList.contains('selected')) {
+                        if (direction == 0) { this.setSelected(false) }
+                        else {
+                            var newValue = stepNumberInput(DomElement, direction); /* Step number input returns the value to which it is now set */
+                            if (this.uid == 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba') { getSelectedElementInRow(activePage, 5).values.voltage = newValue } // Voltage
+                            if (this.uid == 'd1fa07ee-2712-461d-ab16-dd984b4f081a') { getSelectedElementInRow(activePage, 5).values.setpoint = newValue } // Setpoint
+                            
+                            updateMultibarValues('dc');
+                        }
                     }
                     break;
     
                 case FocusElementType.dc_output:
+                    break;
+
+                case FocusElementType.dc_mode:
+                    var domElement = document.querySelector(`[uid="${this.uid}"]`);
+                    domElement.click();
                     break;
     
                 case FocusElementType.dc_module:
@@ -303,6 +313,7 @@ function hardwareEncoderTick(previousEncoderPosition, newEncoderPosition) {
         if (getFocussedElementInRow(activePage, activeRow) == getSelectedElementInRow(activePage, activeRow)) {
             if (activeRow == 1 | 
                 getFocussedElementInRow(activePage, activeRow).type == FocusElementType.sig_type |
+                getFocussedElementInRow(activePage, activeRow).type == FocusElementType.dc_mode |
                 [5,6,7,8].includes(getFocussedElementInRow(activePage, activeRow).type)) { /* if the current row is the navbar, do not interact but scroll to next instead, same for signal type selection and for any multibar items */
                 for (var i = 0; i < Math.abs(differenceEncoderPosition); i++) {
                     getFocussedElementInRow(activePage, activeRow).scrollToNext(differenceEncoderPosition > 0 ? 1 : 0);
@@ -345,6 +356,7 @@ function updateMultibarIndeces(page) {
 /* Function to synchronise the multibar value with the UI */
 function updateMultibarValues(page) {
     if (!getFocussedElementInRow(activePage, 5)) { // Check if there are any selected modules already, if not select the default
+        var tempRow = activeRow;
         changeFocusRow(5);
         
         /* Get the first element in that row (that is selectable) and set focus and selected to it */
@@ -360,6 +372,7 @@ function updateMultibarValues(page) {
                 break;
             }
         }
+        changeFocusRow(tempRow);
     }
     switch (page) {
         /* This is different for each page, take a look at all the IDs and what they link to */

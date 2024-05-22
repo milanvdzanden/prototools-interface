@@ -93,3 +93,9 @@ function createDCModule(append, Value1, Type1, Value2, Type2){
     updateMultibarIndeces('dc');
     updateMultibarWindow('dc');
 }
+
+function dcTypeSelection(id) {
+    document.getElementById('dc-focus-2-2').classList.remove('toggled');
+    document.getElementById('dc-focus-2-3').classList.remove('toggled');
+    document.getElementById(id).classList.add('toggled');
+}
