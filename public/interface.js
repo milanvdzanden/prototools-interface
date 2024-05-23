@@ -355,7 +355,7 @@ function updateMultibarIndeces(page) {
 
 /* Function to synchronise the multibar value with the UI */
 function updateMultibarValues(page) {
-    if (!getFocussedElementInRow(activePage, 5)) { // Check if there are any selected modules already, if not select the default
+    if (!getSelectedElementInRow(activePage, 5)) { // Check if there are any selected modules already, if not select the default
         var tempRow = activeRow;
         changeFocusRow(5);
         
