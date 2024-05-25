@@ -10,6 +10,7 @@ var socketConnected = false;
 var socketClient = null;
 
 var txBuffer = [];
+var txBuffer2 = [];
 var txAvailable = false;
 
 io.on('connection', (socket) => {
