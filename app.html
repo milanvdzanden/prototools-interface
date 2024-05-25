@@ -436,10 +436,10 @@
             element.addEventListener('input', function() {
                 const min = parseFloat(this.min);
                 const max = parseFloat(this.max);
-                const step = parseFloat(this.step);
+                var step = parseFloat(this.step);
 
                 // If the button is pressed, fine or coarse adjust, either is possible
-                if (encoderButtonDown) {
+                if (!encoderButtonDown) {
                     step *= 10;
                 }
 
