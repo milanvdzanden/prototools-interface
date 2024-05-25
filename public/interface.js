@@ -482,3 +482,7 @@ function selectMultibarModule(uid) {
     }
     updateMultibarValues(activePage);
 }
+
+function externalUpdate(uid, values) {
+    focusTree[uid].values = values;
+}

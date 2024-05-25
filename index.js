@@ -13,9 +13,9 @@ var txBuffer = [];
 var txAvailable = false;
 
 io.on('connection', (socket) => {
-  console.log('[INFO] Client Connected');
-  socketClient = socket;
-  socketConnected = true;
+  	console.log('[INFO] Client Connected');
+  	socketClient = socket;
+  	socketConnected = true;
 
 	socket.on('update', (message) => {
 		txBuffer = message;

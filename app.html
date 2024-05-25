@@ -60,8 +60,9 @@
                     <span class="dc-column-value dc-wide-value" id="dc-focus-2-1"><input class="number-input" target='voltage' uid='e6f0ad7f-98cb-4ffd-a967-73592a9673ba' type="number" value="15" step="0.01" min="1" max="20"></span>
                     <span class="dc-column-label" id="dc-voltage-label">V</span>
                     <span class="dc-column-type">MODE</span>
-                    <span class="dc-column-toggle toggled" id="dc-focus-2-2" onclick="dcTypeSelection('dc-focus-2-2')" uid='91edd507-ce08-4d7f-bf7c-0db93952de51'>CV</span>
-                    <span class="dc-column-toggle" id="dc-focus-2-3" onclick="dcTypeSelection('dc-focus-2-3')" uid='8551c08d-ca77-466d-bbb6-25cd2e484e0b'>CC</span>
+                    <span class="dc-column-toggle toggled" id="dc-focus-2-2" onclick="dcTypeSelection('dc-focus-2-2')" uid='3e3cb566-fec9-4c08-9ecb-3e5407ec5640'>OFF</span>
+                    <span class="dc-column-toggle" id="dc-focus-2-3" onclick="dcTypeSelection('dc-focus-2-3')" uid='91edd507-ce08-4d7f-bf7c-0db93952de51'>CV</span>
+                    <span class="dc-column-toggle" id="dc-focus-2-4" onclick="dcTypeSelection('dc-focus-2-4')" uid='8551c08d-ca77-466d-bbb6-25cd2e484e0b'>CC</span>
                 </p>   
             </div>
             <div class="grid-dc-row dc-row-2" id="dc-focus-3">
@@ -301,9 +302,10 @@
             '8409ab76-f905-4257-932b-b2d12429f636': new FocusElement(FocusElementType.dc_nav_tab, '8409ab76-f905-4257-932b-b2d12429f636', 'be96124e-02c9-4305-abe8-3538641b039e', '980163ec-ad83-4f6f-8528-2e76a46b1fc6', {x: 5, y: 1}),
             '980163ec-ad83-4f6f-8528-2e76a46b1fc6': new FocusElement(FocusElementType.dc_nav_tab, '980163ec-ad83-4f6f-8528-2e76a46b1fc6', '8409ab76-f905-4257-932b-b2d12429f636', 'dbb30aa5-7a21-4767-82d4-0e23c184fb4b', {x: 6, y: 1}),
         
-            'e6f0ad7f-98cb-4ffd-a967-73592a9673ba': new FocusElement(FocusElementType.dc_input, 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', '8551c08d-ca77-466d-bbb6-25cd2e484e0b', '91edd507-ce08-4d7f-bf7c-0db93952de51', {x: 1, y: 2}),
-            '91edd507-ce08-4d7f-bf7c-0db93952de51': new FocusElement(FocusElementType.dc_mode, '91edd507-ce08-4d7f-bf7c-0db93952de51', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', '8551c08d-ca77-466d-bbb6-25cd2e484e0b', {x: 2, y: 2}),
-            '8551c08d-ca77-466d-bbb6-25cd2e484e0b': new FocusElement(FocusElementType.dc_mode, '8551c08d-ca77-466d-bbb6-25cd2e484e0b', '91edd507-ce08-4d7f-bf7c-0db93952de51', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', {x: 3, y: 2}),
+            'e6f0ad7f-98cb-4ffd-a967-73592a9673ba': new FocusElement(FocusElementType.dc_input, 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', '8551c08d-ca77-466d-bbb6-25cd2e484e0b', '3e3cb566-fec9-4c08-9ecb-3e5407ec5640', {x: 1, y: 2}),
+            '3e3cb566-fec9-4c08-9ecb-3e5407ec5640': new FocusElement(FocusElementType.dc_mode, '3e3cb566-fec9-4c08-9ecb-3e5407ec5640', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', '91edd507-ce08-4d7f-bf7c-0db93952de51', {x: 2, y: 2}),
+            '91edd507-ce08-4d7f-bf7c-0db93952de51': new FocusElement(FocusElementType.dc_mode, '91edd507-ce08-4d7f-bf7c-0db93952de51', '3e3cb566-fec9-4c08-9ecb-3e5407ec5640', '8551c08d-ca77-466d-bbb6-25cd2e484e0b', {x: 3, y: 2}),
+            '8551c08d-ca77-466d-bbb6-25cd2e484e0b': new FocusElement(FocusElementType.dc_mode, '8551c08d-ca77-466d-bbb6-25cd2e484e0b', '91edd507-ce08-4d7f-bf7c-0db93952de51', 'e6f0ad7f-98cb-4ffd-a967-73592a9673ba', {x: 4, y: 2}),
 
             '12f81bce-fded-4eb8-9352-97ea88fcc59b': new FocusElement(FocusElementType.dc_output, '12f81bce-fded-4eb8-9352-97ea88fcc59b', 'none', 'none', {x: 1, y: 3}),
             'd1fa07ee-2712-461d-ab16-dd984b4f081a': new FocusElement(FocusElementType.dc_input, 'd1fa07ee-2712-461d-ab16-dd984b4f081a', 'd1fa07ee-2712-461d-ab16-dd984b4f081a', 'd1fa07ee-2712-461d-ab16-dd984b4f081a', {x: 2, y: 3}),
@@ -411,8 +413,10 @@
         DC_ModulesWindow = [0,1,2,3];
 
         OSC_Measurements = [];
+        OSC_ModulesWindow = [0,1,2,3];
 
         SIG_Modules = [];
+        SIG_ModulesWindow = [0,1,2,3];
 
         LOGIC_Channels = [];
         
@@ -433,6 +437,12 @@
                 const min = parseFloat(this.min);
                 const max = parseFloat(this.max);
                 const step = parseFloat(this.step);
+
+                // If the button is pressed, fine or coarse adjust, either is possible
+                if (encoderButtonDown) {
+                    step *= 10;
+                }
+
                 let value = parseFloat(this.value);
             
                 // Adjust value to be within the min and max bounds
