@@ -217,7 +217,11 @@ function stepNumberInput(inputElement, steps) {
     let value = parseFloat(inputElement.value);
     const min = inputElement.min ? parseFloat(inputElement.min) : -Infinity;
     const max = inputElement.max ? parseFloat(inputElement.max) : Infinity;
-    const step = inputElement.step ? parseFloat(inputElement.step) : 1;
+    var step = inputElement.step ? parseFloat(inputElement.step) : 1;
+
+    if (!encoderButtonDown) {
+        step = step * 10;
+    }
 
     console.log(value, step*steps, value + step*steps);
     value = Math.min(Math.max(parseFloat(value + step*steps).toFixed(2), min), max);

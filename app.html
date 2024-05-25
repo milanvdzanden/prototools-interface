@@ -438,11 +438,6 @@
                 const max = parseFloat(this.max);
                 var step = parseFloat(this.step);
 
-                // If the button is pressed, fine or coarse adjust, either is possible
-                if (!encoderButtonDown) {
-                    step *= 10;
-                }
-
                 let value = parseFloat(this.value);
             
                 // Adjust value to be within the min and max bounds
